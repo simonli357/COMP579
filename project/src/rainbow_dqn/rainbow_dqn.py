@@ -329,7 +329,7 @@ if __name__ == "__main__":
                             update_target_every=1000, alpha=0.6,
                             beta_start=0.4, beta_frames=100000)
     
-    total_frames = 50000
+    total_frames = 100000
     rewards = agent.train(total_frames)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     torch.save(agent.online_net.state_dict(), os.path.join(current_dir, "rainbow_dqn_weights.pth"))

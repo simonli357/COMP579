@@ -203,7 +203,7 @@ input_channels = 4
 
 agent = PPOAgent(env, input_channels, num_actions, rollout_length=256, update_epochs=4, mini_batch_size=32)
 
-training_rewards = agent.train(total_updates=100)
+training_rewards = agent.train(total_updates=1000)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 torch.save(agent.actor_critic.state_dict(), os.path.join(current_dir, "ppo_weights.pth"))
 
