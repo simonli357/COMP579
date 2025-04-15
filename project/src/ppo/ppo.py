@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import os
+import pickle
 
 import torch
 import torch.nn as nn
@@ -203,8 +204,33 @@ input_channels = 4
 
 agent = PPOAgent(env, input_channels, num_actions, rollout_length=256, update_epochs=4, mini_batch_size=32)
 
-training_rewards = agent.train(total_updates=1000)
+name = '10000'
 current_dir = os.path.dirname(os.path.abspath(__file__))
+weights_path = os.path.join(current_dir, "weights",  f"ppo_weights_{name}.pth")
+if os.path.exists(weights_path):
+    print("Loading saved model weights...")
+    agent.online_net.load_state_dict(torch.load(weights_path))
+    agent.target_net.load_state_dict(agent.online_net.state_dict())
+else:
+    print("No saved model weights found. Starting training from scratch.")
+if os.path.exists(os.path.join(current_dir, "weights", f"ppo_state_{name}.pkl")):
+    print("Loading training state...")
+    with open(os.path.join(current_dir, "weights", f"ppo_state_{name}.pkl"), "rb") as f:
+        state = pickle.load(f)
+        agent.frame_idx = state["frame_idx"]
+        agent.replay_buffer = state["replay_buffer"]
+    print(f"Resuming training from frame {agent.frame_idx}.")
+else:
+    print("No saved training state found. Starting training from scratch.")
+
+os.makedirs(os.path.join(current_dir, "weights"), exist_ok=True)
+    
+training_rewards = agent.train(total_updates=1000)
+with open(os.path.join(current_dir, "weights", "ppo_state.pkl"), "wb") as f:
+    pickle.dump({
+        "frame_idx": agent.frame_idx,
+        "replay_buffer": agent.replay_buffer
+    }, f)
 torch.save(agent.actor_critic.state_dict(), os.path.join(current_dir, "ppo_weights.pth"))
 
 plt.figure(figsize=(8,4))

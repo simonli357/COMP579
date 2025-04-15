@@ -5,6 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import os
+import pickle
 
 import torch
 import torch.nn as nn
@@ -12,6 +13,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Device: {device}")
 
 class PreprocessFrame(gym.ObservationWrapper):
     def __init__(self, env, height=84, width=84, grayscale=True):
@@ -243,8 +245,6 @@ class RainbowDQNAgent:
     def update(self):
         if len(self.replay_buffer.buffer) < self.batch_size:
             return
-        
-        self.frame_idx += 1
         # Anneal beta towards 1
         self.beta = min(1.0, self.beta_start + self.frame_idx * (1.0 - self.beta_start) / self.beta_frames)
         states, actions, rewards, next_states, dones, indices, weights = self.replay_buffer.sample(self.batch_size, self.beta)
@@ -292,7 +292,7 @@ class RainbowDQNAgent:
         state = self.env.reset()
         episode_reward = 0
         all_rewards = []
-        pbar = tqdm(total=num_frames, desc="Training")
+        pbar = tqdm(total=num_frames, desc="Training", initial=self.frame_idx)
         while self.frame_idx < num_frames:
             action = self.select_action(state)
             next_state, reward, done, _ = self.env.step(action)
@@ -305,7 +305,6 @@ class RainbowDQNAgent:
             pbar.update(1)
 
             if done:
-              
                 state = self.env.reset()
                 all_rewards.append(episode_reward)
                 pbar.set_postfix({'Episode Reward': episode_reward})
@@ -329,10 +328,39 @@ if __name__ == "__main__":
                             update_target_every=1000, alpha=0.6,
                             beta_start=0.4, beta_frames=100000)
     
-    total_frames = 100000
-    rewards = agent.train(total_frames)
+    total_frames = 30000
+    
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    torch.save(agent.online_net.state_dict(), os.path.join(current_dir, "rainbow_dqn_weights.pth"))
+    
+    # load saved model
+    name = '10000'
+    weights_path = os.path.join(current_dir, "weights",  f"rainbow_dqn_weights_{name}.pth")
+    if os.path.exists(weights_path):
+        print("Loading saved model weights...")
+        agent.online_net.load_state_dict(torch.load(weights_path))
+        agent.target_net.load_state_dict(agent.online_net.state_dict())
+    else:
+        print("No saved model weights found. Starting training from scratch.")
+    if os.path.exists(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl")):
+        print("Loading training state...")
+        with open(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl"), "rb") as f:
+            state = pickle.load(f)
+            agent.frame_idx = state["frame_idx"]
+            agent.replay_buffer = state["replay_buffer"]
+        print(f"Resuming training from frame {agent.frame_idx}.")
+    else:
+        print("No saved training state found. Starting training from scratch.")
+    
+    os.makedirs(os.path.join(current_dir, "weights"), exist_ok=True)
+    rewards = agent.train(total_frames)
+    
+    # save model
+    with open(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{total_frames}.pkl"), "wb") as f:
+        pickle.dump({
+            "frame_idx": agent.frame_idx,
+            "replay_buffer": agent.replay_buffer
+        }, f)
+    torch.save(agent.online_net.state_dict(), os.path.join(current_dir, "weights", f"rainbow_dqn_weights_{total_frames}.pth"))
     plt.figure(figsize=(8, 4))
     plt.plot(rewards)
     plt.xlabel("Episode")
