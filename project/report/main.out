@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Background}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Reinforcement Learning and Markov Decision Processes}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{The Ms. Pac-Man Environment}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Deep Q-Networks and Rainbow DQN}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Proximal Policy Optimization \(PPO\)}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Challenges in Evaluation}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{Related Approaches in Ms. Pac-Man}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Methodology}{}% 9
+\BOOKMARK [2][-]{subsection.3.1}{Environment}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.2}{Preprocessing}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.3}{Model Architectures}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.4}{Training Details}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.5}{Evaluation Protocol}{section.3}% 14
+\BOOKMARK [1][-]{section.4}{Results and Discussion}{}% 15
+\BOOKMARK [2][-]{subsection.4.1}{Rainbow DQN vs. PPO: Learning Performance}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.2}{Interpretation and Comparative Insights}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.3}{Rainbow DQN Ablation Study}{section.4}% 18

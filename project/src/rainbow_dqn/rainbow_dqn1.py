@@ -13,6 +13,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
+torch.manual_seed(357)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Device: {device}")
 
@@ -257,206 +258,210 @@ class UniformReplayBuffer(PrioritizedReplayBuffer):
     def update_priorities(self, *_):
         pass
 class RainbowDQNAgent:
-    def __init__(self, env, net, replay_buffer_cls,*,input_channels, num_actions,
-                 num_atoms=51, v_min=-10, v_max=10,
-                 learning_rate=1e-4, gamma=0.99,
-                 buffer_size=100000, batch_size=32, multi_step=3,
-                 update_target_every=1000, alpha=0.6,
-                 beta_start=0.4, beta_frames=100000):
-        
-        self.env  = env
-        self.online_net = net.to(device)
-        self.target_net = type(net)().to(device)
+    def __init__(self,
+                 env,
+                 net,                 # pre‑built Rainbow / ablated network
+                 replay_buffer_cls,   # PrioritizedReplayBuffer  or UniformReplayBuffer
+                 *,
+                 buffer_size=100_000,
+                 batch_size=32,
+                 learning_rate=1e-4,
+                 gamma=0.99,
+                 multi_step=3,
+                 update_target_every=1_000,
+                 alpha=0.6,
+                 beta_start=0.4,
+                 beta_frames=100_000,
+                 v_min=-10,
+                 v_max=10):
+
+        # ---------- external handles ----------
+        self.env          = env
+        self.online_net   = net.to(device)
+        self.target_net   = type(net)().to(device)
         self.target_net.load_state_dict(self.online_net.state_dict())
 
-        self.support     = torch.linspace(-10, 10, net.num_atoms).to(device)
-        self.delta_z     = (10 - (-10)) / (net.num_atoms - 1)
-        self.num_atoms   = net.num_atoms
-        self.num_actions = env.action_space.n
+        # ---------- RL hyper‑params ----------
+        self.gamma        = gamma
+        self.multi_step   = multi_step
+        self.batch_size   = batch_size
+        self.update_target_every = update_target_every
 
-        self.gamma, self.multi_step = gamma, multi_step
-        self.batch_size             = batch_size
-        self.update_target_every    = update_target_every
+        # ---------- distributional support ----------
+        self.v_min, self.v_max   = v_min, v_max
+        self.num_atoms           = net.num_atoms
+        self.support             = torch.linspace(v_min, v_max, self.num_atoms).to(device)
+        self.delta_z             = (v_max - v_min) / (self.num_atoms - 1)
 
+        # ---------- replay buffer ----------
         self.replay_buffer = replay_buffer_cls(buffer_size, alpha)
-        self.optimizer     = optim.Adam(self.online_net.parameters(), lr=learning_rate)
+        self.beta_start, self.beta_frames = beta_start, beta_frames
+        self.beta         = beta_start
 
-        self.frame_idx, self.beta_start, self.beta_frames = 0, beta_start, beta_frames
-        self.beta = beta_start
-        
-        self.v_min = v_min
-        self.v_max = v_max
-        
-        self.optimizer = optim.Adam(self.online_net.parameters(), lr=learning_rate)
-    
+        # ---------- optimiser ----------
+        self.optimizer    = optim.Adam(self.online_net.parameters(), lr=learning_rate)
+
+        # ---------- bookkeeping ----------
+        self.frame_idx    = 0
+        self.num_actions  = env.action_space.n
+    # ---------------------------------------------------------------------
+    def _to_tensor(self, arr):
+        """
+        Converts numpy observation or batch to torch tensor with shape (B, C, H, W).
+        Works whether the incoming layout is (C,H,W)  or  (H,W,C).
+        """
+        t = torch.FloatTensor(arr).to(device)
+        if t.ndim == 3:                       # single state
+            # (C,H,W) → ok,  (H,W,C) → need permute
+            if t.shape[0] != 4:               # expect channel dim == 4
+                t = t.permute(2, 0, 1)
+            t = t.unsqueeze(0)                # add batch dim
+        elif t.ndim == 4:                     # batch
+            if t.shape[1] != 4:               # shape (B,H,W,C)
+                t = t.permute(0, 3, 1, 2)
+        return t
     def select_action(self, state):
-        state = np.array(state)
-        if state.ndim == 3 and state.shape[-1] == 4:
-            state = torch.FloatTensor(state).permute(2, 0, 1).unsqueeze(0).to(device)
-        elif state.ndim == 3 and state.shape[0] == 4:
-            state = torch.FloatTensor(state).unsqueeze(0).to(device)
-        else:
-            raise ValueError("Unexpected state shape: {}".format(state.shape))
+        state_t = self._to_tensor(state)
         with torch.no_grad():
-            self.online_net.reset_noise()
-            q_dist = self.online_net(state)  # (1, num_actions, num_atoms)
-            q_values = torch.sum(q_dist * self.support, dim=2)
-            action = q_values.argmax(1).item()
-        return action
-    
+            if hasattr(self.online_net, "reset_noise"):
+                self.online_net.reset_noise()
+            q_dist   = self.online_net(state_t)
+            q_values = (q_dist * self.support).sum(dim=2)
+        return q_values.argmax(1).item()
+    # ---------------------------------------------------------------------
     def projection_distribution(self, next_state, reward, done):
-        """
-        Compute the projection of the target distribution onto the fixed support.
-        """
         with torch.no_grad():
-            self.target_net.reset_noise()
+            if hasattr(self.target_net, "reset_noise"):
+                self.target_net.reset_noise()
+
             next_state = torch.FloatTensor(next_state).to(device)
-            if next_state.ndim == 3:
+            if next_state.ndim == 3:          # (C,H,W)
                 next_state = next_state.unsqueeze(0)
-            next_dist = self.target_net(next_state)  # shape: (1, num_actions, num_atoms)
-            q_values = torch.sum(next_dist * self.support, dim=2)
-            next_action = q_values.argmax(1).item()  # Convert to scalar
-            next_dist = next_dist[0, next_action] 
-        
-        Tz = reward + (1 - done) * (self.gamma ** self.multi_step) * self.support.cpu().numpy()
+
+            next_dist = self.target_net(next_state)            # (1, A, atoms)
+            q_values  = torch.sum(next_dist * self.support, 2) # (1, A)
+            next_action = q_values.argmax(1).item()
+            next_dist   = next_dist[0, next_action]            # (atoms,)
+
+        Tz = reward + (1 - done) * (self.gamma**self.multi_step) * self.support.cpu().numpy()
         Tz = np.clip(Tz, self.v_min, self.v_max)
-        b = (Tz - self.v_min) / self.delta_z
-        l = np.floor(b).astype(np.int64)
-        u = np.ceil(b).astype(np.int64)
-        
+        b  = (Tz - self.v_min) / self.delta_z
+        l, u = np.floor(b).astype(np.int64), np.ceil(b).astype(np.int64)
+
         m = np.zeros(self.num_atoms, dtype=np.float32)
         for i in range(self.num_atoms):
-            # Distribute probability mass to l and u
             if l[i] == u[i]:
                 m[l[i]] += next_dist[i].item()
             else:
                 m[l[i]] += next_dist[i].item() * (u[i] - b[i])
                 m[u[i]] += next_dist[i].item() * (b[i] - l[i])
         return torch.FloatTensor(m).to(device)
-    
+    # ---------------------------------------------------------------------
     def update(self):
         if len(self.replay_buffer.buffer) < self.batch_size:
             return
-        # Anneal beta towards 1
-        self.beta = min(1.0, self.beta_start + self.frame_idx * (1.0 - self.beta_start) / self.beta_frames)
-        states, actions, rewards, next_states, dones, indices, weights = self.replay_buffer.sample(self.batch_size, self.beta)
-        
-        states = torch.FloatTensor(states).to(device)
-        if states.ndim == 4 and states.shape[-1] == 4:
-            states = states.permute(0, 3, 1, 2)
-        next_states = torch.FloatTensor(next_states).to(device)
-        if next_states.ndim == 4 and next_states.shape[-1] == 4:
-            next_states = next_states.permute(0, 3, 1, 2)
-        actions = torch.LongTensor(actions).to(device)
-        rewards = torch.FloatTensor(rewards).to(device)
-        dones = torch.FloatTensor(dones).to(device)
-        weights = torch.FloatTensor(weights).to(device)
-        
-        self.online_net.reset_noise()
-        dist = self.online_net(states)  # shape: (batch, num_actions, num_atoms)
-        actions = actions.unsqueeze(1).unsqueeze(1).expand(self.batch_size, 1, self.num_atoms)
-        dist = dist.gather(1, actions).squeeze(1)  # shape: (batch, num_atoms)
-        dist = dist.clamp(min=1e-3)
-        
+
+        # anneal importance‑sampling β toward 1
+        self.beta = min(1.0,
+                        self.beta_start + self.frame_idx *
+                        (1.0 - self.beta_start) / self.beta_frames)
+
+        (states, actions, rewards,
+         next_states, dones,
+         idxs, weights) = self.replay_buffer.sample(self.batch_size, self.beta)
+
+        states      = self._to_tensor(states)
+        next_states = self._to_tensor(next_states)
+        actions     = torch.LongTensor(actions).to(device)
+        rewards     = torch.FloatTensor(rewards).to(device)
+        dones       = torch.FloatTensor(dones).to(device)
+        weights     = torch.FloatTensor(weights).to(device)
+
+        if hasattr(self.online_net, "reset_noise"):
+            self.online_net.reset_noise()
+
+        dist  = self.online_net(states)                         # (B, A, atoms)
+        dist  = dist.gather(1, actions.unsqueeze(1).unsqueeze(1).expand(-1,1,self.num_atoms))
+        dist  = dist.squeeze(1).clamp(min=1e-3)                 # (B, atoms)
+
         target_dist = []
         for i in range(self.batch_size):
-            target_m = self.projection_distribution(next_states[i].cpu().numpy(),
-                                          rewards[i].item(), dones[i].item())
+            target_dist.append(self.projection_distribution(next_states[i].cpu().numpy(),
+                                                            rewards[i].item(),
+                                                            dones[i].item()))
+        target_dist = torch.stack(target_dist)                  # (B, atoms)
 
-            target_dist.append(target_m)
-        target_dist = torch.stack(target_dist)  # shape: (batch, num_atoms)
-        
-        log_p = torch.log(dist)
-        sample_losses = - (target_dist * log_p).sum(1)
-        loss = (sample_losses * weights).mean()
-        
+        loss_per_sample = -(target_dist * torch.log(dist)).sum(1)
+        loss = (loss_per_sample * weights).mean()
+
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-        
-        new_priorities = sample_losses.detach().cpu().numpy() + 1e-6
-        self.replay_buffer.update_priorities(indices, new_priorities)
-        
+
+        # update PER priorities
+        new_prios = loss_per_sample.detach().cpu().numpy() + 1e-6
+        self.replay_buffer.update_priorities(idxs, new_prios)
+
         if self.frame_idx % self.update_target_every == 0:
             self.target_net.load_state_dict(self.online_net.state_dict())
-    
+    # ---------------------------------------------------------------------
     def train(self, num_frames):
         state = self.env.reset()
-        episode_reward = 0
-        all_rewards = []
-        pbar = tqdm(total=num_frames, desc="Training", initial=self.frame_idx)
+        ep_reward, all_rewards = 0, []
+        pbar = tqdm(total=num_frames, desc="Training")
+
         while self.frame_idx < num_frames:
             action = self.select_action(state)
             next_state, reward, done, _ = self.env.step(action)
             self.replay_buffer.push(state, action, reward, next_state, done)
-            state = next_state
-            episode_reward += reward
 
+            state, ep_reward = next_state, ep_reward + reward
             self.update()
             self.frame_idx += 1
             pbar.update(1)
 
             if done:
                 state = self.env.reset()
-                all_rewards.append(episode_reward)
-                pbar.set_postfix({'Episode Reward': episode_reward})
-                print(f"Frame: {self.frame_idx}, Episode Reward: {episode_reward}")
-                episode_reward = 0
+                all_rewards.append(ep_reward)
+                pbar.set_postfix({'Episode reward': ep_reward})
+                ep_reward = 0
+
         pbar.close()
         return all_rewards
+    
+def run_experiment(cfg: dict, out_dir: pathlib.Path):
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "config.json").write_text(json.dumps(cfg, indent=2))
+
+    env = gym.make("MsPacman-v0", render_mode=None)
+    env = PreprocessFrame(env)
+    env = gym.wrappers.FrameStack(env, 4)
+
+    net = build_rainbow(4, env.action_space.n,
+                        noisy=cfg["noisy"],
+                        dueling=True,
+                        num_atoms=51)
+
+    buffer_cls = PrioritizedReplayBuffer if cfg["prioritized"] else UniformReplayBuffer
+
+    agent = RainbowDQNAgent(env, net, buffer_cls,
+                            buffer_size=100_000,
+                            batch_size=32,
+                            learning_rate=cfg["lr"],
+                            multi_step=cfg["multi_step"],
+                            gamma=0.99)
+
+    rewards = agent.train(cfg["frames"])
+    np.save(out_dir / "rewards.npy", np.array(rewards))
+    torch.save(agent.online_net.state_dict(), out_dir / "weights_final.pth")
 
 if __name__ == "__main__":
-    env = gym.make('MsPacman-v0')
-    env = PreprocessFrame(env)
-    env = gym.wrappers.FrameStack(env, num_stack=4)
-    
-    num_actions = env.action_space.n
-    input_channels = 4 
-    
-    agent = RainbowDQNAgent(env, input_channels, num_actions,
-                            num_atoms=51, v_min=-10, v_max=10,
-                            learning_rate=1e-4, gamma=0.99,
-                            buffer_size=100000, batch_size=32, multi_step=3,
-                            update_target_every=1000, alpha=0.6,
-                            beta_start=0.4, beta_frames=100000)
-    
-    total_frames = 30000
-    
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    # load saved model
-    name = '10000'
-    weights_path = os.path.join(current_dir, "weights",  f"rainbow_dqn_weights_{name}.pth")
-    if os.path.exists(weights_path):
-        print("Loading saved model weights...")
-        agent.online_net.load_state_dict(torch.load(weights_path))
-        agent.target_net.load_state_dict(agent.online_net.state_dict())
-    else:
-        print("No saved model weights found. Starting training from scratch.")
-    if os.path.exists(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl")):
-        print("Loading training state...")
-        with open(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl"), "rb") as f:
-            state = pickle.load(f)
-            agent.frame_idx = state["frame_idx"]
-            agent.replay_buffer = state["replay_buffer"]
-        print(f"Resuming training from frame {agent.frame_idx}.")
-    else:
-        print("No saved training state found. Starting training from scratch.")
-    
-    os.makedirs(os.path.join(current_dir, "weights"), exist_ok=True)
-    rewards = agent.train(total_frames)
-    
-    # save model
-    with open(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{total_frames}.pkl"), "wb") as f:
-        pickle.dump({
-            "frame_idx": agent.frame_idx,
-            "replay_buffer": agent.replay_buffer
-        }, f)
-    torch.save(agent.online_net.state_dict(), os.path.join(current_dir, "weights", f"rainbow_dqn_weights_{total_frames}.pth"))
-    plt.figure(figsize=(8, 4))
-    plt.plot(rewards)
-    plt.xlabel("Episode")
-    plt.ylabel("Total Reward")
-    plt.title("Training Performance of Rainbow DQN on Ms. Pac-Man")
-    plt.savefig(os.path.join(current_dir, "rainbow_dqn_training.png"))
-    plt.show()
+    sweep = [
+        {"name": "full_rainbow", "noisy":True,  "prioritized":True,  "multi_step":3, "lr":1e-4, "frames":30_000},
+        {"name": "no_noisy",     "noisy":False, "prioritized":True,  "multi_step":3, "lr":1e-4, "frames":30_000},
+        {"name": "no_prior",     "noisy":True,  "prioritized":False, "multi_step":3, "lr":1e-4, "frames":30_000},
+        {"name": "nstep1",       "noisy":True,  "prioritized":True,  "multi_step":1, "lr":1e-4, "frames":30_000},
+    ]
+    root = pathlib.Path("experiments")
+    for cfg in sweep:
+        run_experiment(cfg, root / cfg["name"])

@@ -1,0 +1,47 @@
+\begin{thebibliography}{1}
+
+\bibitem{ale}
+Marc~G Bellemare, Yavar Naddaf, Joel Veness, and Michael Bowling.
+\newblock The arcade learning environment: An evaluation platform for general
+  agents.
+\newblock {\em Journal of Artificial Intelligence Research}, 47:253--279, 2013.
+
+\bibitem{hessel2018rainbow}
+Matteo Hessel, Joseph Modayil, Hado Van~Hasselt, Tom Schaul, Georg Ostrovski,
+  Will Dabney, Dan Horgan, Bilal Piot, Mohammad~G Azar, and David Silver.
+\newblock Rainbow: Combining improvements in deep reinforcement learning.
+\newblock In {\em Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~32, 2018.
+
+\bibitem{mnih2015human}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei~A Rusu, Joel Veness,
+  Marc~G Bellemare, Alex Graves, Martin Riedmiller, Andreas~K Fidjeland, Georg
+  Ostrovski, et~al.
+\newblock Human-level control through deep reinforcement learning.
+\newblock {\em Nature}, 518(7540):529--533, 2015.
+
+\bibitem{pieters2016monte}
+Roel Pieters and Sander Bakkes.
+\newblock Monte carlo tree search for the ms. pac-man competition.
+\newblock In {\em 2016 IEEE Conference on Computational Intelligence and Games
+  (CIG)}, pages 1--8. IEEE, 2016.
+
+\bibitem{schulman2017proximal}
+John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov.
+\newblock Proximal policy optimization algorithms.
+\newblock In {\em arXiv preprint arXiv:1707.06347}, 2017.
+
+\bibitem{toromanoff2019deep}
+Mikael Toromanoff, Alessandro Lazaric, and Olivier Pietquin.
+\newblock Deep reinforcement learning with attention for slate markov decision
+  processes with high-dimensional states and actions.
+\newblock In {\em International Conference on Machine Learning (ICML)}, 2019.
+
+\bibitem{zhang2020investigation}
+Amy Zhang, Andrew Ballard, Tom Zahavy, Huan Xu, Joelle Pineau, and Marc~G
+  Bellemare.
+\newblock An investigation of model-free planning.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2020.
+
+\end{thebibliography}
