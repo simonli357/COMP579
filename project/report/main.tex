@@ -204,7 +204,7 @@ Finally, the \textbf{nstep1} variant consistently underperforms across the entir
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{rainbow_ablation.png}
+    \includegraphics[width=\linewidth]{rainbow_ablation_smooth.png}
     \caption{Training performance of Rainbow DQN and ablated variants on Ms. Pac-Man. Each line shows episode rewards for a different configuration.}
     \label{fig:rainbow_ablation}
 \end{figure}
@@ -217,6 +217,27 @@ Finally, the \textbf{nstep1} variant consistently underperforms across the entir
 \end{itemize}
 
 These insights reinforce the utility of Rainbow’s component-wise enhancements while also suggesting that certain components, like prioritized replay, may be omitted in resource-constrained deployments without catastrophic performance loss.
+
+\subsection{Robustness to Color Perturbations}
+
+To evaluate the generalization capability of our trained Rainbow DQN agent, we tested its performance in a visually modified environment. Specifically, we introduced a color perturbation by replacing the original grayscale preprocessing with a tinted RGB variant. This was implemented using a custom wrapper \texttt{ColorPreprocessFrame}, which converts each frame to grayscale and then reprojects it into RGB space using a fixed tint vector (e.g., red tint with weights $(1.0, 0.0, 0.0)$). The purpose of this transformation is to alter the visual appearance of the input frames while preserving the underlying game dynamics and semantics.
+
+Figure~\ref{fig:color_robustness} compares the agent’s training performance on the standard grayscale input against its performance in the color-tinted setting. Notably, the agent evaluated in the tinted environment was not retrained — it reused the same weights learned under the grayscale setting. This allows us to directly assess robustness to unseen visual domains.
+
+The results indicate a substantial degradation in performance under color perturbation. While the grayscale agent stabilizes between 400–650 points per episode, the tinted version often struggles to reach 300 and in some episodes dips below 100. This confirms prior findings \cite{zhang2020investigation} that RL agents trained from pixels can be highly sensitive to superficial visual changes. Since the dynamics and reward structure are unchanged, this drop can be attributed to the agent’s reliance on visual texture cues learned during training.
+
+Interestingly, in later episodes (25–32), the color-tinted agent begins to recover, briefly matching grayscale performance. This suggests some latent generalization capacity or adaptation through experience replay, although such recovery is inconsistent and short-lived.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{color_robustness.png}
+    \caption{Performance of Rainbow DQN under color perturbation. The model was trained on grayscale frames and evaluated in a color-tinted environment without further training.}
+    \label{fig:color_robustness}
+\end{figure}
+
+\subsubsection*{Implications}
+
+This experiment highlights a key limitation in vision-based RL: agents often fail to generalize across visually altered domains, even when the task dynamics are preserved. The reliance on pixel-level features makes them vulnerable to changes in texture, brightness, or color composition. Future work could explore techniques to mitigate this sensitivity, such as domain randomization, data augmentation, or contrastive representation learning to enforce invariance to such visual shifts.
 
 \bibliographystyle{plain}
 \bibliography{references}

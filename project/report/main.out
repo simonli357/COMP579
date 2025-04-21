@@ -16,3 +16,4 @@
 \BOOKMARK [2][-]{subsection.4.1}{Rainbow DQN vs. PPO: Learning Performance}{section.4}% 16
 \BOOKMARK [2][-]{subsection.4.2}{Interpretation and Comparative Insights}{section.4}% 17
 \BOOKMARK [2][-]{subsection.4.3}{Rainbow DQN Ablation Study}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.4}{Robustness to Color Perturbations}{section.4}% 19

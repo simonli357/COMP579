@@ -491,7 +491,7 @@ def run_experiment(cfg: dict,
     buffer_cls = PrioritizedReplayBuffer if cfg["prioritized"] else UniformReplayBuffer
 
     agent = RainbowDQNAgent(env, net, buffer_cls,
-                            buffer_size=100_000,
+                            buffer_size=50_000,
                             batch_size=32,
                             learning_rate=cfg["lr"],
                             multi_step=cfg["multi_step"],
