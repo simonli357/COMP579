@@ -172,6 +172,17 @@ for a total of eight combinations, each trained for 30 000 frames using a singl
 
 \section{Results and Discussion}
 
+\subsection{Hyperparameter testing for PPO}
+
+We experimented with three PPO hyperparameter sets in Ms. Pac-Man: a Balanced configuration (blue) for stable learning (longer rollouts, moderate clipping), a Fast Training configuration (orange) for rapid updates (shorter rollouts, higher entropy), and an Aggressive Learning configuration (green) for high performance (longer rollouts, tight gradient control, low entropy). The Aggressive configuration performed best, consistently achieving the highest rewards (near 1,000) due to its balance of stability and efficiency. While the Fast configuration learned quickly but plateaued early, and the Balanced configuration remained steady but less optimal, The Aggressive configuration’s results are also likely reproducible, given that each run was repeated three times.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{PPO_output_hyperparameters_3set.png}
+    \caption{PPO Hyperparameters Optimization Results}
+    \label{fig:ppo_hyperparams}
+\end{figure}
+
 \subsection{Rainbow DQN vs. PPO: Learning Performance}
 
 Figure~\ref{fig:ppo_vs_rainbow} presents the training performance of our PPO and Rainbow DQN agents in the \texttt{MsPacman-v0} environment. While neither agent reaches expert-level performance within the limited frame budget, we observe several qualitative and quantitative differences between the two learning dynamics.
@@ -320,6 +331,12 @@ Interestingly, in later episodes (25–32), the color-tinted agent begins to rec
 \subsubsection*{Implications}
 
 This experiment highlights a key limitation in vision-based RL: agents often fail to generalize across visually altered domains, even when the task dynamics are preserved. The reliance on pixel-level features makes them vulnerable to changes in texture, brightness, or color composition. Future work could explore techniques to mitigate this sensitivity, such as domain randomization, data augmentation, or contrastive representation learning to enforce invariance to such visual shifts.
+
+\section{Conclusion}
+
+
+\subsection{Future Work}
+Other interesting things that could be tried for both our PPO and Rainbow agents in Ms. Pac-Man, we suggest three next steps. First, adding memory (LSTM) to PPO would help the agent remember past states, which is crucial for navigating mazes. Second, training both algorithms much longer—for tens of millions of frames—could help them reach superhuman scores, like top RL systems do in other games. Finally, running each experiment at least 5 times would make the results more reliable, since deep RL training can vary a lot between runs. These changes would help us build stronger agents and better understand how to master complex games like Ms. Pac-Man.
 
 \bibliographystyle{plain}
 \bibliography{references}
