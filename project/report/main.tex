@@ -158,6 +158,18 @@ Our evaluation is based on a fixed frame budget for each agent, after which perf
     \item \textbf{Final performance:} Episode return after training concludes, shown in our results figures.
 \end{itemize}
 
+\subsection{Hyperparameter Ablation}
+We performed a small grid sweep over the three hyperparameters with the largest reported impact on Rainbow DQN performance: the Adam learning rate \(\eta\), the multi‐step return length \(n\), and the replay prioritization exponent \(\alpha\).  All other settings remained as in Section 3.4 (\(\gamma=0.99\), buffer size \(10^5\), batch size 32, target network update every 1 000 frames, \(\beta\) annealed from 0.4 to 1.0 over 100 000 frames).
+
+Specifically, we evaluated
+\[
+\eta \in \{1\times10^{-5},\,5\times10^{-5}\},\quad
+n \in \{3,\,5\},\quad
+\alpha \in \{0.4,\,0.6\},
+\]
+for a total of eight combinations, each trained for 30 000 frames using a single fixed seed.  This preliminary scan helped us identify which settings yield faster reward growth and which incur higher variance.  
+
+
 \section{Results and Discussion}
 
 \subsection{Rainbow DQN vs. PPO: Learning Performance}
@@ -182,6 +194,76 @@ Both agents show signs of early learning, but Rainbow DQN achieves significantly
 However, the volatility in both plots indicates that neither agent has fully stabilized. PPO’s reward collapse in later updates highlights the sensitivity of policy gradient methods to training hyperparameters and the challenges of on-policy learning in high-dimensional settings. Conversely, Rainbow’s high variance suggests that better reward shaping, more training time, or additional architectural tuning (e.g., learning rate, replay buffer size) might be needed to achieve consistent gains.
 
 In summary, Rainbow DQN shows greater promise in this environment under the current constraints, exhibiting higher peak performance and a stronger upward trend. PPO’s learning is less consistent, though its earlier convergence and training stability in the initial phase suggest it may benefit from a more extensive rollout horizon or different GAE parameters.
+
+\subsection{Hyperparameter Ablation Results on Rainbow DQN}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/rainbow_8Regular.png}
+  \caption{Learning curves for the eight hyperparameter configurations:
+           \(\eta\in\{1\times10^{-5},5\times10^{-5}\}\), 
+           \(n\in\{3,5\}\), 
+           \(\alpha\in\{0.4,0.6\}\).}
+  \label{fig:ablation}
+\end{figure}
+
+Figure~\ref{fig:ablation} shows the cross product of our two learning rates \(\eta=1\times10^{-5},\,5\times10^{-5}\), two multi‐step return lengths \(n=3,5\), and two prioritization strengths \(\alpha=0.4,0.6\). While all eight curves exhibit high variance, four configurations stand out:
+
+\begin{itemize}
+  \item \textbf{Configuration D} (red): \(\eta=1\times10^{-5},\,n=5,\,\alpha=0.6\);
+  \item \textbf{Configuration E} (purple): \(\eta=5\times10^{-5},\,n=3,\,\alpha=0.4\);
+  \item \textbf{Configuration G} (pink): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.4\);
+  \item \textbf{Configuration H} (gray): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.6\).
+\end{itemize}
+
+All four use the higher learning rate of \(5\times10^{-5}\) except D (which compensates with a larger \(\alpha\)), and three of them (D, G, H) employ the larger \(n=5\) return. Their stronger final rewards suggest that, in Ms.\ Pac‑Man’s sparse, long‑horizon setting, both a more aggressive multi‑step bootstrap (\(n=5\)) and a modestly increased learning rate help the agent discover higher‑reward behaviors.
+
+\subsection{Extended Hyperparameter Sweep on Rainbow DQN}
+
+To assess how auxiliary settings affect all eight baseline configurations (A–H), we re‑ran each combination with the following scaled‑up parameters:
+\begin{itemize}
+  \item \texttt{buffer\_size}: 100\,000 \(\to\) 1\,000\,000  
+  \item \texttt{target\_update\_every}: 1\,000 frames \(\to\) 5\,000 frames  
+  \item \(\beta\_frames\): 100\,000 \(\to\) 500\,000  
+\end{itemize}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/rainbow_8Extended.png}
+  \caption{Learning curves for the eight “large” hyperparameter runs (A\_large–H\_large).}
+  \label{fig:extended_sweep}
+\end{figure}
+
+Figure~\ref{fig:extended_sweep} plots the resulting “large” runs (A\_large–H\_large). While all eight extended curves improve compared to their 30K‑frame originals (Section 4.3), four in particular rise noticeably above the pack:
+\begin{itemize}
+  \item \textbf{Configuration C\_large} (green): \(\eta=1\times10^{-5},\,n=5,\,\alpha=0.4\)  
+  \item \textbf{Configuration E\_large} (purple): \(\eta=5\times10^{-5},\,n=3,\,\alpha=0.4\)  
+  \item \textbf{Configuration G\_large} (pink): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.4\)  
+  \item \textbf{Configuration H\_large} (gray): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.6\)  
+\end{itemize}
+
+All four share the larger replay buffer, and three of them (C, G, H) use the 5‑step return. Their gains demonstrate that, beyond choosing an aggressive bootstrap horizon (\(n=5\)) and modestly higher learning rate, scaling up replay capacity and slowing \(\beta\)-annealing provides more benefit—smoothing variance and boosting median reward most for those combinations. However, all curves remain highly volatile, with nearly every configuration fluctuating on the order of \(\pm500\) points per episode. This high variance stems from Ms.\ Pac-Man’s sparse, delayed rewards and the stochastic nature of prioritized sampling, which—despite larger buffers and slower \(\beta\) schedules—amplifies jitter in the estimated value distributions. As a result, the extended hyperparameter sweep yields only modest overall improvement, and further work (e.g., more seeds, longer training, or variance‐reduction techniques) may be required to reveal clearer gains.  
+
+\subsection{Seed‐Level Reproducibility on Rainbow DQN}
+
+To assess the stability of our hyperparameter choices, we re‑ran Configurations A and E across three different random seeds (\(0,1,2\)). Figures~\ref{fig:seed_A} and \ref{fig:seed_E} show, for each seed, the episode‑wise total reward (dashed lines), the mean curve (solid black), and the shaded \(\pm1\sigma\) band.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/rainbow_A_seed.png}
+  \caption{Configuration A (\(\eta=1\times10^{-5},\,n=3,\,\alpha=0.4\)) across three seeds.}
+  \label{fig:seed_A}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/rainbow_E_seed.png}
+  \caption{Configuration E (\(\eta=5\times10^{-5},\,n=3,\,\alpha=0.4\)) across three seeds.}
+  \label{fig:seed_E}
+\end{figure}
+
+Overall, Configuration E achieves a higher average reward than A, but at the cost of increased jitter. These results underscore the importance of reporting across multiple seeds—averaging over 3–5 runs provides a more reliable estimate of true performance than any single trial. Given the wide per seed variability, reporting a single run can be misleading. Averaging across 3–5 seeds provides a more robust estimate of true algorithmic performance.
+
 
 \subsection{Rainbow DQN Ablation Study}
 
