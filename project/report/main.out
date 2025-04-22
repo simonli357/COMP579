@@ -23,3 +23,11 @@
 \BOOKMARK [2][-]{subsection.4.7}{Rainbow DQN Ablation Study}{section.4}% 23
 \BOOKMARK [1][-]{section.5}{Conclusion}{}% 24
 \BOOKMARK [2][-]{subsection.5.1}{Future Work}{section.5}% 25
+\BOOKMARK [1][-]{appendix.A}{Appendix}{}% 26
+\BOOKMARK [2][-]{subsection.A.1}{PPO Hyperparameter Sweeps}{appendix.A}% 27
+\BOOKMARK [2][-]{subsection.A.2}{Rainbow DQN vs PPO}{appendix.A}% 28
+\BOOKMARK [2][-]{subsection.A.3}{Rainbow DQN Ablation Results}{appendix.A}% 29
+\BOOKMARK [2][-]{subsection.A.4}{Extended Hyperparameter Sweep}{appendix.A}% 30
+\BOOKMARK [2][-]{subsection.A.5}{Seed-Level Reproducibility}{appendix.A}% 31
+\BOOKMARK [2][-]{subsection.A.6}{Ablated Rainbow DQN Variants}{appendix.A}% 32
+\BOOKMARK [1][-]{figure.7}{References}{}% 33

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.3.12)  22 APR 2025 13:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.3.12)  22 APR 2025 13:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -298,29 +298,36 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 \mathdisplay@stack=\toks23
 LaTeX Info: Redefining \[ on input line 2859.
 LaTeX Info: Redefining \] on input line 2860.
+) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count274
+\float@exts=\toks24
+\float@box=\box47
+\@float@everytoks=\toks25
+\@floatcapt=\box48
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count274
-\l__pdf_internal_box=\box47
+\l__kernel_color_stack_int=\count275
+\l__pdf_internal_box=\box49
 ) (/home/slsecret/COMP579/project/report/main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -388,8 +395,8 @@ LaTeX Font Info:    ... okay on input line 35.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box48
-Package hyperref Info: Link coloring OFF on input line 35.
+\AtBeginShipoutBox=\box50
+Package hyperref Info: Link coloring OFF on input line 36.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -397,23 +404,23 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count275
+\c@section@level=\count276
 )
-LaTeX Info: Redefining \ref on input line 35.
-LaTeX Info: Redefining \pageref on input line 35.
-LaTeX Info: Redefining \nameref on input line 35.
+LaTeX Info: Redefining \ref on input line 36.
+LaTeX Info: Redefining \pageref on input line 36.
+LaTeX Info: Redefining \nameref on input line 36.
  (/home/slsecret/COMP579/project/report/main.out) (/home/slsecret/COMP579/project/report/main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
-LaTeX Info: Redefining \microtypecontext on input line 35.
+LaTeX Info: Redefining \microtypecontext on input line 36.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 35.
+LaTeX Info: Redefining \showhyphens on input line 36.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -421,17 +428,17 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 ) (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count276
+\scratchcounter=\count277
 \scratchdimen=\dimen172
-\scratchbox=\box49
-\nofMPsegments=\count277
-\nofMParguments=\count278
-\everyMPshowfont=\toks24
-\MPscratchCnt=\count279
+\scratchbox=\box51
+\nofMPsegments=\count278
+\nofMParguments=\count279
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count280
 \MPscratchDim=\dimen173
-\MPnumerator=\count280
-\makeMPintoPDFobject=\count281
-\everyMPtoPDFconversion=\toks25
+\MPnumerator=\count281
+\makeMPintoPDFobject=\count282
+\everyMPtoPDFconversion=\toks27
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -440,19 +447,19 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 )) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 45.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 46.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
@@ -460,7 +467,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 51.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 52.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
@@ -469,70 +476,114 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
-<PPO_output_hyperparameters_3set.png, id=156, 902.6523pt x 506.6127pt>
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7]
+<PPO_output_hyperparameters_3set.png, id=214, 902.6523pt x 506.6127pt>
 File: PPO_output_hyperparameters_3set.png Graphic file (type png)
 <use PPO_output_hyperparameters_3set.png>
-Package pdftex.def Info: PPO_output_hyperparameters_3set.png  used on input line 181.
+Package pdftex.def Info: PPO_output_hyperparameters_3set.png  used on input line 296.
 (pdftex.def)             Requested size: 397.48499pt x 223.08806pt.
- [5 </home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png>]
-<rainbow_vs_ppo.png, id=167, 1781.65625pt x 475.7775pt>
+<rainbow_vs_ppo.png, id=216, 1781.65625pt x 475.7775pt>
 File: rainbow_vs_ppo.png Graphic file (type png)
 <use rainbow_vs_ppo.png>
-Package pdftex.def Info: rainbow_vs_ppo.png  used on input line 196.
+Package pdftex.def Info: rainbow_vs_ppo.png  used on input line 304.
 (pdftex.def)             Requested size: 337.86465pt x 90.22443pt.
-<rainbow_8Regular.png, id=168, 620.7993pt x 395.3169pt>
+<rainbow_8Regular.png, id=217, 620.7993pt x 395.3169pt>
 File: rainbow_8Regular.png Graphic file (type png)
 <use rainbow_8Regular.png>
-Package pdftex.def Info: rainbow_8Regular.png  used on input line 213.
+Package pdftex.def Info: rainbow_8Regular.png  used on input line 312.
 (pdftex.def)             Requested size: 317.9892pt x 202.49565pt.
- [6 </home/slsecret/COMP579/project/report/rainbow_vs_ppo.png>]
-<rainbow_8Extended.png, id=176, 620.7993pt x 395.3169pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.319 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.319 
+       </home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png> </home/slsecret/COMP579/project/report/rainbow_vs_ppo.png>]
+<rainbow_8Extended.png, id=225, 620.7993pt x 395.3169pt>
 File: rainbow_8Extended.png Graphic file (type png)
 <use rainbow_8Extended.png>
-Package pdftex.def Info: rainbow_8Extended.png  used on input line 243.
+Package pdftex.def Info: rainbow_8Extended.png  used on input line 323.
 (pdftex.def)             Requested size: 357.73405pt x 227.80609pt.
- [7 </home/slsecret/COMP579/project/report/rainbow_8Regular.png> </home/slsecret/COMP579/project/report/rainbow_8Extended.png>]
-<rainbow_A_seed.png, id=188, 502.2765pt x 284.0211pt>
+<rainbow_A_seed.png, id=226, 502.2765pt x 284.0211pt>
 File: rainbow_A_seed.png Graphic file (type png)
 <use rainbow_A_seed.png>
-Package pdftex.def Info: rainbow_A_seed.png  used on input line 264.
+Package pdftex.def Info: rainbow_A_seed.png  used on input line 331.
 (pdftex.def)             Requested size: 317.9892pt x 179.81833pt.
-<rainbow_E_seed.png, id=189, 508.7808pt x 284.0211pt>
-File: rainbow_E_seed.png Graphic file (type png)
-<use rainbow_E_seed.png>
-Package pdftex.def Info: rainbow_E_seed.png  used on input line 271.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.335 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.335 
+       </home/slsecret/COMP579/project/report/rainbow_8Regular.png> </home/slsecret/COMP579/project/report/rainbow_8Extended.png>]
+<rainbow_E_Seed.png, id=233, 508.7808pt x 284.0211pt>
+File: rainbow_E_Seed.png Graphic file (type png)
+<use rainbow_E_Seed.png>
+Package pdftex.def Info: rainbow_E_Seed.png  used on input line 338.
 (pdftex.def)             Requested size: 317.9892pt x 177.52141pt.
- [8 </home/slsecret/COMP579/project/report/rainbow_A_seed.png>]
-<rainbow_ablation_smooth.png, id=198, 722.7pt x 289.08pt>
+<rainbow_ablation_smooth.png, id=234, 722.7pt x 289.08pt>
 File: rainbow_ablation_smooth.png Graphic file (type png)
 <use rainbow_ablation_smooth.png>
-Package pdftex.def Info: rainbow_ablation_smooth.png  used on input line 300.
+Package pdftex.def Info: rainbow_ablation_smooth.png  used on input line 346.
 (pdftex.def)             Requested size: 397.48499pt x 158.99448pt.
- [9 </home/slsecret/COMP579/project/report/rainbow_E_Seed.png> </home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png>] (/home/slsecret/COMP579/project/report/main.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 344.
- [10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 344.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.350 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.350 
+       </home/slsecret/COMP579/project/report/rainbow_A_seed.png> </home/slsecret/COMP579/project/report/rainbow_E_Seed.png>] [11pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.351 \clearpage
+                 </home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png>] (/home/slsecret/COMP579/project/report/main.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 356.
+ [12
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 356.
  (/home/slsecret/COMP579/project/report/main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 344.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 344.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 356.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 356.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8921E9002B14A5D9FD8264E84BE73C2A;1818.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 344.
+(rerunfilecheck)             Checksum: FB556592B9DAA7F0EC167086393D5FC2;2368.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 356.
  ) 
 Here is how much of TeX's memory you used:
- 9451 strings out of 483081
- 143894 string characters out of 5963441
- 442511 words of memory out of 5000000
- 24095 multiletter control sequences out of 15000+600000
+ 9527 strings out of 483081
+ 144887 string characters out of 5963441
+ 444127 words of memory out of 5000000
+ 24158 multiletter control sequences out of 15000+600000
  565481 words of font info for 143 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  38i,8n,42p,1034b,383s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/slsecret/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on /home/slsecret/COMP579/project/report/main.pdf (10 pages, 842008 bytes).
+Output written on /home/slsecret/COMP579/project/report/main.pdf (12 pages, 843000 bytes).
 PDF statistics:
- 303 PDF objects out of 1000 (max. 8388607)
- 227 compressed objects within 3 object streams
- 54 named destinations out of 1000 (max. 500000)
- 20204 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 344 PDF objects out of 1000 (max. 8388607)
+ 266 compressed objects within 3 object streams
+ 63 named destinations out of 1000 (max. 500000)
+ 20268 words of extra memory for PDF output out of 20736 (max. 10000000)
 
