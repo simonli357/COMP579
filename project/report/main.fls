@@ -190,6 +190,9 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
+INPUT /home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png
+INPUT /home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png
+INPUT /home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png
 INPUT /home/slsecret/COMP579/project/report/rainbow_vs_ppo.png
 INPUT /home/slsecret/COMP579/project/report/rainbow_vs_ppo.png
 INPUT /home/slsecret/COMP579/project/report/rainbow_vs_ppo.png
@@ -208,9 +211,6 @@ INPUT /home/slsecret/COMP579/project/report/rainbow_E_Seed.png
 INPUT /home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png
 INPUT /home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png
 INPUT /home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png
-INPUT /home/slsecret/COMP579/project/report/color_robustness.png
-INPUT /home/slsecret/COMP579/project/report/color_robustness.png
-INPUT /home/slsecret/COMP579/project/report/color_robustness.png
 INPUT /home/slsecret/COMP579/project/report/main.bbl
 INPUT /home/slsecret/COMP579/project/report/main.bbl
 INPUT /home/slsecret/COMP579/project/report/main.aux
