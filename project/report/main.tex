@@ -177,10 +177,10 @@ for a total of eight combinations, each trained for 30 000 frames using a singl
 We experimented with three PPO hyperparameter sets in Ms. Pac-Man: a Balanced configuration (blue) for stable learning (longer rollouts, moderate clipping), a Fast Training configuration (orange) for rapid updates (shorter rollouts, higher entropy), and an Aggressive Learning configuration (green) for high performance (longer rollouts, tight gradient control, low entropy). The Aggressive configuration performed best, consistently achieving the highest rewards (near 1,000) due to its balance of stability and efficiency. The Fast configuration has low results and plateaued early, and the Balanced configuration remained steady but less optimal, The Aggressive configuration’s results are also reproducible, given that each run was repeated three times.
 
 \begin{figure}[h]
-    \centering
-    \includegraphics{PPO_output_hyperparameters_3set.png}
-    \caption{PPO Hyperparameters Optimization Results}
-    \label{fig:ppo_hyperparams}
+  \centering
+  \includegraphics[width=\linewidth]{PPO_output_hyperparameters_3set.png}
+  \caption{PPO Hyperparameters Optimization Results}
+  \label{fig:ppo_hyperparams}
 \end{figure}
 
 \subsection{Rainbow DQN vs. PPO: Learning Performance}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.3.12)  22 APR 2025 13:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.3.12)  22 APR 2025 13:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -474,60 +474,44 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: PPO_output_hyperparameters_3set.png Graphic file (type png)
 <use PPO_output_hyperparameters_3set.png>
 Package pdftex.def Info: PPO_output_hyperparameters_3set.png  used on input line 181.
-(pdftex.def)             Requested size: 902.6501pt x 506.61145pt.
-
-Overfull \hbox (505.16512pt too wide) in paragraph at lines 181--182
- [][] 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<rainbow_vs_ppo.png, id=159, 1781.65625pt x 475.7775pt>
+(pdftex.def)             Requested size: 397.48499pt x 223.08806pt.
+ [5 </home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png>]
+<rainbow_vs_ppo.png, id=167, 1781.65625pt x 475.7775pt>
 File: rainbow_vs_ppo.png Graphic file (type png)
 <use rainbow_vs_ppo.png>
 Package pdftex.def Info: rainbow_vs_ppo.png  used on input line 196.
 (pdftex.def)             Requested size: 337.86465pt x 90.22443pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[5]
-<rainbow_8Regular.png, id=166, 620.7993pt x 395.3169pt>
+<rainbow_8Regular.png, id=168, 620.7993pt x 395.3169pt>
 File: rainbow_8Regular.png Graphic file (type png)
 <use rainbow_8Regular.png>
 Package pdftex.def Info: rainbow_8Regular.png  used on input line 213.
 (pdftex.def)             Requested size: 317.9892pt x 202.49565pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6 </home/slsecret/COMP579/project/report/PPO_output_hyperparameters_3set.png>] [7 </home/slsecret/COMP579/project/report/rainbow_vs_ppo.png> </home/slsecret/COMP579/project/report/rainbow_8Regular.png>]
-<rainbow_8Extended.png, id=182, 620.7993pt x 395.3169pt>
+ [6 </home/slsecret/COMP579/project/report/rainbow_vs_ppo.png>]
+<rainbow_8Extended.png, id=176, 620.7993pt x 395.3169pt>
 File: rainbow_8Extended.png Graphic file (type png)
 <use rainbow_8Extended.png>
 Package pdftex.def Info: rainbow_8Extended.png  used on input line 243.
 (pdftex.def)             Requested size: 357.73405pt x 227.80609pt.
-<rainbow_A_seed.png, id=186, 502.2765pt x 284.0211pt>
+ [7 </home/slsecret/COMP579/project/report/rainbow_8Regular.png> </home/slsecret/COMP579/project/report/rainbow_8Extended.png>]
+<rainbow_A_seed.png, id=188, 502.2765pt x 284.0211pt>
 File: rainbow_A_seed.png Graphic file (type png)
 <use rainbow_A_seed.png>
 Package pdftex.def Info: rainbow_A_seed.png  used on input line 264.
 (pdftex.def)             Requested size: 317.9892pt x 179.81833pt.
-<rainbow_E_seed.png, id=187, 508.7808pt x 284.0211pt>
+<rainbow_E_seed.png, id=189, 508.7808pt x 284.0211pt>
 File: rainbow_E_seed.png Graphic file (type png)
 <use rainbow_E_seed.png>
 Package pdftex.def Info: rainbow_E_seed.png  used on input line 271.
 (pdftex.def)             Requested size: 317.9892pt x 177.52141pt.
- [8 </home/slsecret/COMP579/project/report/rainbow_8Extended.png>] [9 </home/slsecret/COMP579/project/report/rainbow_A_seed.png> </home/slsecret/COMP579/project/report/rainbow_E_Seed.png>]
-<rainbow_ablation_smooth.png, id=204, 722.7pt x 289.08pt>
+ [8 </home/slsecret/COMP579/project/report/rainbow_A_seed.png>]
+<rainbow_ablation_smooth.png, id=198, 722.7pt x 289.08pt>
 File: rainbow_ablation_smooth.png Graphic file (type png)
 <use rainbow_ablation_smooth.png>
 Package pdftex.def Info: rainbow_ablation_smooth.png  used on input line 300.
 (pdftex.def)             Requested size: 397.48499pt x 158.99448pt.
- (/home/slsecret/COMP579/project/report/main.bbl
-Underfull \vbox (badness 1394) has occurred while \output is active []
-
- [10 </home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png>])
+ [9 </home/slsecret/COMP579/project/report/rainbow_E_Seed.png> </home/slsecret/COMP579/project/report/rainbow_ablation_smooth.png>] (/home/slsecret/COMP579/project/report/main.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 344.
- [11]
+ [10]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 344.
  (/home/slsecret/COMP579/project/report/main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 344.
@@ -537,18 +521,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 344.
  ) 
 Here is how much of TeX's memory you used:
- 9452 strings out of 483081
- 143901 string characters out of 5963441
- 442866 words of memory out of 5000000
+ 9451 strings out of 483081
+ 143894 string characters out of 5963441
+ 442511 words of memory out of 5000000
  24095 multiletter control sequences out of 15000+600000
  565481 words of font info for 143 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 38i,8n,42p,1034b,425s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,8n,42p,1034b,383s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/slsecret/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on /home/slsecret/COMP579/project/report/main.pdf (11 pages, 842157 bytes).
+Output written on /home/slsecret/COMP579/project/report/main.pdf (10 pages, 842008 bytes).
 PDF statistics:
- 308 PDF objects out of 1000 (max. 8388607)
- 231 compressed objects within 3 object streams
- 55 named destinations out of 1000 (max. 500000)
+ 303 PDF objects out of 1000 (max. 8388607)
+ 227 compressed objects within 3 object streams
+ 54 named destinations out of 1000 (max. 500000)
  20204 words of extra memory for PDF output out of 20736 (max. 10000000)
 
