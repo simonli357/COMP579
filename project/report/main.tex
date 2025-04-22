@@ -31,6 +31,10 @@
 
 \maketitle
 
+\begin{abstract}
+  We investigate the comparative performance of Rainbow DQN and Proximal Policy Optimization (PPO) in the visually complex Ms. Pac-Man environment. Our study evaluates learning dynamics, hyperparameter sensitivity, and robustness to visual perturbations. Rainbow DQN consistently achieves higher peak rewards and demonstrates stronger long-term learning, while PPO shows faster early convergence but suffers from instability. We also conduct ablation studies and color-based generalization tests, offering practical insights into the role of architecture and training design in sparse-reward, high-variance domains.
+\end{abstract}
+
 \section{Introduction}
 
 Deep reinforcement learning (RL) has achieved remarkable success in solving a variety of challenging sequential decision-making tasks, particularly in high-dimensional environments such as Atari 2600 games \cite{mnih2015human}. These games, accessible through the Arcade Learning Environment (ALE) \cite{ale}, provide an ideal testbed for evaluating RL algorithms due to their complex dynamics, partial observability, sparse rewards, and the need for both short-term reactivity and long-term planning. Among these, the game \textit{Ms. Pac-Man} stands out as a particularly difficult benchmark: it features stochastic ghost behavior, multiple strategies for survival and scoring, and a visually rich input space, making it an ideal environment for testing the robustness and scalability of RL algorithms.
@@ -276,6 +280,10 @@ These insights reinforce the utility of Rainbow’s component-wise enhancements 
 % This experiment highlights a key limitation in vision-based RL: agents often fail to generalize across visually altered domains, even when the task dynamics are preserved. The reliance on pixel-level features makes them vulnerable to changes in texture, brightness, or color composition. Future work could explore techniques to mitigate this sensitivity, such as domain randomization, data augmentation, or contrastive representation learning to enforce invariance to such visual shifts.
 
 \section{Conclusion}
+
+Across our experiments in the \texttt{MsPacman-v0} environment, Rainbow DQN demonstrated greater long-term potential compared to PPO. While both agents showed signs of early learning, Rainbow consistently reached higher peak rewards, suggesting that value-based methods — especially those enhanced with prioritized replay, multi-step returns, and noisy exploration — are more effective at discovering high-reward strategies in sparse-reward, long-horizon settings like Ms. Pac-Man.
+
+PPO initially showed more stable performance but suffered from later instability and reward collapse, highlighting the sensitivity of policy gradient methods to hyperparameter tuning and on-policy sampling noise. Meanwhile, Rainbow’s higher variance points to its own limitations, such as the need for more careful reward shaping or extended training to achieve consistent convergence. Nevertheless, under our limited frame budget, Rainbow's sample efficiency and reward potential clearly outpaced PPO.
 
 \subsection{Future Work}
 Other interesting things that could be tried for both our PPO and Rainbow agents in Ms. Pac-Man, we suggest three next steps. First, adding memory (LSTM) to PPO would help the agent remember past states, which is crucial for navigating mazes. Second, training both algorithms much longer—for tens of millions of frames—could help them reach superhuman scores, like top RL systems do in other games. Finally, running each experiment at least 5 times would make the results more reliable, since deep RL training can vary a lot between runs. These changes would help us build stronger agents and better understand how to master complex games like Ms. Pac-Man.
