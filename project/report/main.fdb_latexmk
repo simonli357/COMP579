@@ -1,16 +1,16 @@
 # Fdb version 3
-["bibtex main"] 1745357548 "main.aux" "main.bbl" "main" 1745357549
+["bibtex main"] 1745358425 "main.aux" "main.bbl" "main" 1745358426
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/plain.bst" 1292289607 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main.aux" 1745357549 8332 9aa8b120b8755659d10b8a775cac36eb "pdflatex"
+  "main.aux" 1745358426 8249 26084520e10d7bed613b654bbcf88c8a "pdflatex"
   "references.bib" 1745009532 2392 64ec31af01709e9f3ec99800ff259a48 ""
   (generated)
   "main.blg"
   "main.bbl"
-["pdflatex"] 1745357548 "/home/slsecret/COMP579/project/report/main.tex" "/home/slsecret/COMP579/project/report/main.pdf" "main" 1745357549
+["pdflatex"] 1745358425 "/home/slsecret/COMP579/project/report/main.tex" "/home/slsecret/COMP579/project/report/main.pdf" "main" 1745358426
   "/etc/texmf/web2c/texmf.cnf" 1734616350 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/slsecret/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk" 1741836485 20008 36a19c2b11a6c72b4086f4e99535d5b2 ""
-  "/home/slsecret/COMP579/project/report/main.aux" 1745357549 8332 9aa8b120b8755659d10b8a775cac36eb ""
-  "/home/slsecret/COMP579/project/report/main.tex" 1745357547 33490 6b186c0d364d89775d1fd6286646e30f ""
+  "/home/slsecret/COMP579/project/report/main.aux" 1745358426 8249 26084520e10d7bed613b654bbcf88c8a ""
+  "/home/slsecret/COMP579/project/report/main.tex" 1745358424 29789 9a30b9aeb8d40e2f92c69c5e53d90217 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm" 1136768653 4524 6bce29db5bc272ba5f332261583fee9c ""
@@ -116,10 +116,10 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1741814378 4466368 52c71989c2513f7eda2d905c9c758dbb ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1741814386 4897129 2e62bfeff7dbcd74661266fdf1302985 ""
   "PPO_output_hyperparameters_3set.png" 1745343394 197716 f057cef349e2c1bb70bdfc374d43dd73 ""
-  "main.aux" 1745357549 8332 9aa8b120b8755659d10b8a775cac36eb "pdflatex"
-  "main.bbl" 1745357548 1995 5179078f1925bee4d434dbe895287b6c "bibtex main"
-  "main.out" 1745357549 2368 fb556592b9daa7f0ec167086393d5fc2 "pdflatex"
-  "main.tex" 1745357547 33490 6b186c0d364d89775d1fd6286646e30f ""
+  "main.aux" 1745358426 8249 26084520e10d7bed613b654bbcf88c8a "pdflatex"
+  "main.bbl" 1745358425 1995 5179078f1925bee4d434dbe895287b6c "bibtex main"
+  "main.out" 1745358426 2303 28ff9bc38fd7cda1c355c916c485313d "pdflatex"
+  "main.tex" 1745358424 29789 9a30b9aeb8d40e2f92c69c5e53d90217 ""
   "neurips_2024.sty" 1745007615 11625 b5f853b54a7a098e9e5b837f826d5daa ""
   "rainbow_8Extended.png" 1745321519 103590 8fcb0b7d5760cdd80370ac4ae15bbbbe ""
   "rainbow_8Regular.png" 1745321519 102045 25f0b1906d4977b94fc6fc24b85d92e9 ""
@@ -128,9 +128,9 @@
   "rainbow_ablation_smooth.png" 1745270072 61561 f50682f6a626b3be92c361567cd691bc ""
   "rainbow_vs_ppo.png" 1745021056 195572 1deb99f3c855cbe57a509614ae256f85 ""
   (generated)
-  "main.pdf"
   "main.log"
-  "main.aux"
-  "/home/slsecret/COMP579/project/report/main.log"
-  "/home/slsecret/COMP579/project/report/main.pdf"
   "main.out"
+  "/home/slsecret/COMP579/project/report/main.pdf"
+  "main.aux"
+  "main.pdf"
+  "/home/slsecret/COMP579/project/report/main.log"
