@@ -1,44 +1,53 @@
 # test_rainbow_dqn.py
 import gym
 import torch
-from rainbow_dqn import RainbowDQNAgent, PreprocessFrame  # import your agent and wrappers
-from torch import device as torch_device
+import json
 import os
+from rainbow_dqn import RainbowDQNAgent, PreprocessFrame, build_rainbow, PrioritizedReplayBuffer
 from gym.wrappers import RecordVideo
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Device: {device}")
 
+# --- Setup environment ---
 env = gym.make('MsPacman-v0')
 env = PreprocessFrame(env)
 env = gym.wrappers.FrameStack(env, num_stack=4)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-env = RecordVideo(env, video_folder=os.path.join(current_dir, "videos"), episode_trigger=lambda episode_id: True)
 
-num_actions = env.action_space.n
-input_channels = 4 
+# --- Video recording ---
+current_dir = os.path.dirname(os.path.abspath(__file__))
+video_path = os.path.join(current_dir, "videos")
+os.makedirs(video_path, exist_ok=True)
+
+env = RecordVideo(env, video_folder=video_path, episode_trigger=lambda ep_id: True)
+env.reset()
+
+# --- Load agent parameters ---
+param_path = os.path.join(current_dir, "weights", "rainbow_dqn_params_50000.json")
+with open(param_path, "r") as f:
+    agent_params = json.load(f)
+
+# --- Create and load agent ---
+input_channels = agent_params["input_channels"]
+num_actions = agent_params["num_actions"]
+
+net = build_rainbow(input_channels, num_actions,
+                    noisy=True,
+                    dueling=True,
+                    num_atoms=agent_params.get("num_atoms", 51))
+
 agent = RainbowDQNAgent(
-    env, 
-    input_channels, 
-    num_actions,
-    num_atoms=51, 
-    v_min=-10, 
-    v_max=10,
-    learning_rate=1e-4, 
-    gamma=0.99,
-    buffer_size=100000, 
-    batch_size=32, 
-    multi_step=3,
-    update_target_every=1000, 
-    alpha=0.6,
-    beta_start=0.4, 
-    beta_frames=100000
+    env, net,
+    replay_buffer_cls=PrioritizedReplayBuffer,
+    **agent_params
 )
 
-agent.online_net.load_state_dict(torch.load(os.path.join(current_dir, "rainbow_dqn_weights.pth"), map_location=device))
+weights_path = os.path.join(current_dir, "weights", "rainbow_dqn_weights_50000.pth")
+agent.online_net.load_state_dict(torch.load(weights_path, map_location=device))
 agent.online_net.eval()
 
-num_test_episodes = 5
+# --- Run test episodes ---
+num_test_episodes = 30
 
 for episode in range(num_test_episodes):
     state = env.reset()
@@ -53,3 +62,4 @@ for episode in range(num_test_episodes):
     print(f"Episode {episode + 1}: Reward = {episode_reward}")
 
 env.close()
+print(f"Videos saved to {video_path}")

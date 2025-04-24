@@ -14,20 +14,19 @@
 \BOOKMARK [2][-]{subsection.3.5}{Evaluation Protocol}{section.3}% 14
 \BOOKMARK [2][-]{subsection.3.6}{Hyperparameter Ablation}{section.3}% 15
 \BOOKMARK [1][-]{section.4}{Results and Discussion}{}% 16
-\BOOKMARK [2][-]{subsection.4.1}{Hyperparameter testing for PPO}{section.4}% 17
-\BOOKMARK [2][-]{subsection.4.2}{Rainbow DQN vs. PPO: Learning Performance}{section.4}% 18
-\BOOKMARK [2][-]{subsection.4.3}{Interpretation and Comparative Insights}{section.4}% 19
-\BOOKMARK [2][-]{subsection.4.4}{Hyperparameter Ablation Results on Rainbow DQN}{section.4}% 20
-\BOOKMARK [2][-]{subsection.4.5}{Extended Hyperparameter Sweep on Rainbow DQN}{section.4}% 21
+\BOOKMARK [2][-]{subsection.4.1}{PPO Hyperparameter Sensitivity}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.2}{Comparative Performance: Rainbow DQN vs. PPO}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.3}{Insights and Interpretation}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.4}{Rainbow DQN Hyperparameter Ablation}{section.4}% 20
+\BOOKMARK [2][-]{subsection.4.5}{Extended Sweep: Replay and Update Scaling}{section.4}% 21
 \BOOKMARK [2][-]{subsection.4.6}{Seed-Level Reproducibility on Rainbow DQN}{section.4}% 22
 \BOOKMARK [2][-]{subsection.4.7}{Rainbow DQN Ablation Study}{section.4}% 23
 \BOOKMARK [1][-]{section.5}{Conclusion}{}% 24
-\BOOKMARK [2][-]{subsection.5.1}{Future Work}{section.5}% 25
-\BOOKMARK [1][-]{appendix.A}{Appendix}{}% 26
-\BOOKMARK [2][-]{subsection.A.1}{PPO Hyperparameter Sweeps}{appendix.A}% 27
-\BOOKMARK [2][-]{subsection.A.2}{Rainbow DQN vs PPO}{appendix.A}% 28
-\BOOKMARK [2][-]{subsection.A.3}{Rainbow DQN Ablation Results}{appendix.A}% 29
-\BOOKMARK [2][-]{subsection.A.4}{Extended Hyperparameter Sweep}{appendix.A}% 30
-\BOOKMARK [2][-]{subsection.A.5}{Seed-Level Reproducibility}{appendix.A}% 31
-\BOOKMARK [2][-]{subsection.A.6}{Ablated Rainbow DQN Variants}{appendix.A}% 32
-\BOOKMARK [1][-]{figure.7}{References}{}% 33
+\BOOKMARK [1][-]{appendix.A}{Appendix}{}% 25
+\BOOKMARK [2][-]{subsection.A.1}{PPO Hyperparameter Sweeps}{appendix.A}% 26
+\BOOKMARK [2][-]{subsection.A.2}{Rainbow DQN vs PPO}{appendix.A}% 27
+\BOOKMARK [2][-]{subsection.A.3}{Rainbow DQN Ablation Results}{appendix.A}% 28
+\BOOKMARK [2][-]{subsection.A.4}{Extended Hyperparameter Sweep}{appendix.A}% 29
+\BOOKMARK [2][-]{subsection.A.5}{Seed-Level Reproducibility}{appendix.A}% 30
+\BOOKMARK [2][-]{subsection.A.6}{Ablated Rainbow DQN Variants}{appendix.A}% 31
+\BOOKMARK [1][-]{figure.7}{References}{}% 32

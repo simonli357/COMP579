@@ -413,37 +413,56 @@ if __name__ == "__main__":
     num_actions = env.action_space.n
     input_channels = 4 
     
-    agent = RainbowDQNAgent(env, input_channels, num_actions,
-                            num_atoms=51, v_min=-10, v_max=10,
-                            learning_rate=1e-4, gamma=0.99,
-                            buffer_size=100000, batch_size=32, multi_step=3,
-                            update_target_every=1000, alpha=0.6,
-                            beta_start=0.4, beta_frames=100000)
+    agent_params = {
+        "input_channels": input_channels,
+        "num_actions": num_actions,
+        "num_atoms": 51,
+        "v_min": -10,
+        "v_max": 10,
+        "learning_rate": 5e-5,
+        "gamma": 0.99,
+        "buffer_size": 1000000,
+        "batch_size": 32,
+        "multi_step": 5,
+        "update_target_every": 5000,
+        "alpha": 0.6,
+        "beta_start": 0.4,
+        "beta_frames": 500000
+    }
     
-    total_frames = 30000
+    agent = RainbowDQNAgent(env, build_rainbow(input_channels, num_actions), 
+                        replay_buffer_cls=PrioritizedReplayBuffer,
+                        **agent_params)
+    
+    total_frames = 50000
     
     current_dir = os.path.dirname(os.path.abspath(__file__))
     
     # load saved model
-    name = '10000'
-    weights_path = os.path.join(current_dir, "weights",  f"rainbow_dqn_weights_{name}.pth")
-    if os.path.exists(weights_path):
-        print("Loading saved model weights...")
-        agent.online_net.load_state_dict(torch.load(weights_path))
-        agent.target_net.load_state_dict(agent.online_net.state_dict())
-    else:
-        print("No saved model weights found. Starting training from scratch.")
-    if os.path.exists(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl")):
-        print("Loading training state...")
-        with open(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl"), "rb") as f:
-            state = pickle.load(f)
-            agent.frame_idx = state["frame_idx"]
-            agent.replay_buffer = state["replay_buffer"]
-        print(f"Resuming training from frame {agent.frame_idx}.")
-    else:
-        print("No saved training state found. Starting training from scratch.")
+    # name = '10000'
+    # weights_path = os.path.join(current_dir, "weights",  f"rainbow_dqn_weights_{name}.pth")
+    # if os.path.exists(weights_path):
+    #     print("Loading saved model weights...")
+    #     agent.online_net.load_state_dict(torch.load(weights_path))
+    #     agent.target_net.load_state_dict(agent.online_net.state_dict())
+    # else:
+    #     print("No saved model weights found. Starting training from scratch.")
+    # if os.path.exists(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl")):
+    #     print("Loading training state...")
+    #     with open(os.path.join(current_dir, "weights", f"rainbow_dqn_state_{name}.pkl"), "rb") as f:
+    #         state = pickle.load(f)
+    #         agent.frame_idx = state["frame_idx"]
+    #         agent.replay_buffer = state["replay_buffer"]
+    #     print(f"Resuming training from frame {agent.frame_idx}.")
+    # else:
+    #     print("No saved training state found. Starting training from scratch.")
     
     os.makedirs(os.path.join(current_dir, "weights"), exist_ok=True)
+    
+    params_path = os.path.join(current_dir, "weights", f"rainbow_dqn_params_{total_frames}.json")
+    with open(params_path, "w") as f:
+        json.dump(agent_params, f, indent=4)
+        
     rewards = agent.train(total_frames)
     
     # save model

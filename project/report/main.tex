@@ -76,119 +76,76 @@ Evaluating agents in visually rich environments like Ms. Pac-Man is non-trivial.
 \subsection{Related Work}
 
 Prior approaches to Ms. Pac-Man have explored architectural and algorithmic enhancements. Toromanoff et al. \cite{toromanoff2019deep} combined CNNs with recurrent networks to mitigate partial observability, achieving performance significantly better than DQN. Other works, such as Pieters et al. \cite{pieters2016monte}, introduced planning-based methods like Monte Carlo Tree Search for improved control, though these typically rely on engineered features. In contrast, we adopt a pure pixel-based learning paradigm and extend the robustness analysis by introducing controlled visual perturbations during evaluation.
+
 \section{Methodology}
 
 \subsection{Environment}
 
-We evaluate our agents using the \texttt{MsPacman-v0} environment from OpenAI Gym, built on the Arcade Learning Environment (ALE) \cite{ale}. The environment provides raw RGB frames of size $210 \times 160 \times 3$, which we preprocess into $84 \times 84$ grayscale or colored images, normalized to the $[0, 1]$ range. To capture temporal dynamics, we stack the last 4 frames as input to the agent, providing a simple form of memory. The action space contains 9 discrete actions including the 4 cardinal directions, 4 diagonals, and a no-op. The reward structure is sparse and native to the game: +10 for collecting pellets, +200 for eating ghosts after consuming a power pellet, and –1 as a per-step time penalty. Episodes terminate after the agent loses all 3 lives.
+We evaluate agents in the \texttt{MsPacman-v0} environment from OpenAI Gym, based on the Arcade Learning Environment (ALE) \cite{ale}. The environment outputs raw $210 \times 160 \times 3$ RGB frames, which we preprocess into $84 \times 84$ grayscale or color-normalized images scaled to $[0, 1]$. To encode temporal dynamics, we stack the last 4 frames as input. The action space comprises 9 discrete actions: four cardinal, four diagonal directions, and a no-op. Rewards are sparse: +10 for pellets, +200 for ghosts after a power pellet, and –1 per time step. Episodes end after the agent loses all 3 lives.
 
 \subsection{Preprocessing}
 
-We use two preprocessing pipelines in our experiments:
+We employ two preprocessing pipelines:
 
-\begin{itemize}
-    \item \textbf{Baseline Preprocessing:} RGB frames are converted to grayscale and resized to $84 \times 84$ pixels using bilinear interpolation. Pixel values are normalized and stacked across 4 timesteps.
-    
-    \item \textbf{Color Perturbation Preprocessing:} To evaluate robustness, we introduce a custom wrapper \texttt{ColorPreprocessFrame}, which first converts each frame to grayscale and then applies a color tint or OpenCV colormap. The output is a 3-channel RGB image. Tint variants include red, green, and blue scaling, while colormap variants include \texttt{cv2.COLORMAP\_JET}, among others. This allows us to test whether agents trained in standard conditions can generalize under visually altered but semantically identical states.
-\end{itemize}
+\textbf{Baseline:} RGB frames are converted to grayscale, resized to $84 \times 84$ via bilinear interpolation, normalized, and stacked across 4 frames.
+
+\textbf{Color Perturbation:} To assess robustness, we introduce a custom \texttt{ColorPreprocessFrame} wrapper. Frames are first grayscaled, then tinted or transformed using OpenCV colormaps (e.g., \texttt{cv2.COLORMAP\_JET}). Tints include red, green, and blue channels. The result is a 3-channel RGB image that preserves semantic content while altering visual appearance.
 
 \subsection{Model Architectures}
 
-\paragraph{Rainbow DQN.}
-We implement the full Rainbow DQN \cite{hessel2018rainbow} architecture, combining several enhancements over the original DQN \cite{mnih2015human}:
-\begin{itemize}
-    \item A convolutional backbone with three layers (32, 64, 64 filters) followed by a flattening layer;
-    \item A dueling network head with separate value and advantage streams;
-    \item NoisyLinear layers for exploration, with initial standard deviation $\sigma=0.017$;
-    \item A distributional output using 51 atoms over the fixed value range $[-10, 10]$;
-    \item Prioritized experience replay with $\alpha = 0.6$ and $\beta$ annealed from 0.4 to 1.0;
-    \item Multi-step learning with $n = 3$.
-\end{itemize}
-The target network is updated every 1,000 environment steps. The model is trained using the Adam optimizer with a learning rate of $1 \times 10^{-4}$.
+\paragraph{Rainbow DQN.} We implement the full Rainbow DQN \cite{hessel2018rainbow}, incorporating:
+a convolutional encoder (32, 64, 64 filters); a dueling head with separate value and advantage streams; NoisyLinear layers ($\sigma=0.017$); a distributional output with 51 atoms over $[-10, 10]$; prioritized replay ($\alpha = 0.6$, $\beta$ annealed from 0.4 to 1.0); and multi-step returns with $n = 3$. The target network is updated every 1,000 steps. Training uses the Adam optimizer with a learning rate of $1 \times 10^{-4}$.
 
-\paragraph{Proximal Policy Optimization (PPO).}
-Our PPO implementation follows the standard actor-critic design, using a shared convolutional feature extractor with the same architecture as Rainbow DQN, followed by a 512-unit fully connected layer. The actor and critic heads branch from this shared backbone. We optimize the clipped surrogate objective with $\epsilon = 0.1$ and use Generalized Advantage Estimation (GAE) with $\lambda = 0.95$. Training is conducted using a batch size of 32, and a learning rate of $2.5 \times 10^{-4}$, for 1000 updates using 256-step rollouts, totaling 256,000 environment steps.
+\paragraph{Proximal Policy Optimization (PPO).} PPO follows a shared convolutional encoder (identical to Rainbow), feeding into a 512-unit fully connected layer, then branching into actor and critic heads. We optimize the clipped surrogate objective ($\epsilon = 0.1$) and use GAE with $\lambda = 0.95$. PPO is trained with a batch size of 32, a learning rate of $2.5 \times 10^{-4}$, across 1000 updates with 256-step rollouts (256,000 environment steps in total).
 
 \subsection{Training Details}
 
-Both agents are trained using frame-stacked observations and the Adam optimizer. The Rainbow DQN agent is trained for 30,000 to 50,000 frames per experimental setting, while PPO is trained for 1000 steps due to its on-policy nature. We use a single reproducibility seed (357) across all experiments due to time constraints and limited compute. Each training run is followed by an evaluation phase using the same environment configuration, without exploration noise.
+Agents receive frame-stacked inputs and are trained using Adam. Rainbow DQN is trained for 30,000–50,000 frames, while PPO trains for 1,000 steps due to its on-policy nature. A fixed seed (357) is used across all experiments. Evaluation follows each training run using the same configuration, but without exploration noise.
 
-Training and evaluation were conducted on a for the ablation and color studies were conducted on an NVIDIA RTX 3080 laptop, while the hyperparameter studies were done on a mac notebook, with end-to-end training time ranging from 2 to 5 hours depending on the experiment.
+Experiments were conducted on an NVIDIA RTX 3080 laptop (ablation and color studies) and a Mac notebook (hyperparameter tuning), with training durations ranging from 2–5 hours depending on the task.
 
 \subsection{Evaluation Protocol}
 
-Our evaluation is based on a fixed frame budget for each agent, after which performance is measured in terms of:
-
-\begin{itemize}
-    \item \textbf{Average episode return:} Cumulative score achieved per episode during training.
-    \item \textbf{Final performance:} Episode return after training concludes, shown in our results figures.
-\end{itemize}
+Each agent is evaluated using a fixed frame budget. We report:
+average episode return over training and final episode return post-training, as visualized in the results.
 
 \subsection{Hyperparameter Ablation}
-We performed a small grid sweep over the three hyperparameters with the largest reported impact on Rainbow DQN performance: the Adam learning rate \(\eta\), the multi‐step return length \(n\), and the replay prioritization exponent \(\alpha\).  All other settings remained as in Section 3.4 (\(\gamma=0.99\), buffer size \(10^5\), batch size 32, target network update every 1 000 frames, \(\beta\) annealed from 0.4 to 1.0 over 100 000 frames).
 
-Specifically, we evaluated
+We conducted a grid search on three key Rainbow DQN hyperparameters: Adam learning rate $\eta$, multi-step return length $n$, and replay prioritization exponent $\alpha$, with all other settings fixed as in Section~3.4 ($\gamma=0.99$, buffer size $10^5$, batch size 32, target update every 1,000 frames, and $\beta$ annealed from 0.4 to 1.0 over 100,000 frames).
+
+Specifically, we evaluated:
 \[
 \eta \in \{1\times10^{-5},\,5\times10^{-5}\},\quad
 n \in \{3,\,5\},\quad
 \alpha \in \{0.4,\,0.6\},
 \]
-for a total of eight combinations, each trained for 30 000 frames using a single fixed seed.  This preliminary scan helped us identify which settings yield faster reward growth and which incur higher variance.  
-
+yielding eight combinations, each trained for 30,000 frames using a fixed seed. This preliminary sweep identified settings that promoted faster reward growth and highlighted configurations with higher variance.
 
 \section{Results and Discussion}
 
-\subsection{Hyperparameter testing for PPO}
+\subsection{PPO Hyperparameter Sensitivity}
 
-We experimented with three PPO hyperparameter sets in Ms. Pac-Man: a Balanced configuration (blue) for stable learning (longer rollouts, moderate clipping), a Fast Training configuration (orange) for rapid updates (shorter rollouts, higher entropy), and an Aggressive Learning configuration (green) for high performance (longer rollouts, tight gradient control, low entropy). The Aggressive configuration performed best, consistently achieving the highest rewards (near 1,000) due to its balance of stability and efficiency. The Fast configuration has low results and plateaued early, and the Balanced configuration remained steady but less optimal, The Aggressive configuration’s results are also reproducible, given that each run was repeated three times.
+We evaluated three PPO configurations: \textit{Balanced} (blue), \textit{Fast Training} (orange), and \textit{Aggressive} (green). The Aggressive setup, combining long rollouts, tight gradient clipping, and low entropy, consistently achieved the highest rewards (approaching 1,000), demonstrating a favorable trade-off between stability and efficiency. In contrast, Fast Training plateaued early at lower scores, while Balanced learning remained steady but suboptimal. Results were reproducible across three runs for each configuration.
 
-\subsection{Rainbow DQN vs. PPO: Learning Performance}
+\subsection{Comparative Performance: Rainbow DQN vs. PPO}
 
-Figure~\ref{fig:ppo_vs_rainbow} presents the training performance of our PPO and Rainbow DQN agents in the \texttt{MsPacman-v0} environment. While neither agent reaches expert-level performance within the limited frame budget, we observe several qualitative and quantitative differences between the two learning dynamics.
+Figure~\ref{fig:ppo_vs_rainbow} compares PPO and Rainbow DQN learning in \texttt{MsPacman-v0}. PPO displays early convergence to a moderate range (600–800 points) but deteriorates after update 800, likely due to sampling noise and hyperparameter sensitivity. It still manages to acquire basic survival and collection behaviors.
 
-The PPO agent (top) exhibits highly variable performance throughout the training process. Initially, it converges to a moderately stable reward range of 600–800 after approximately 250 updates (equivalent to $\sim$64,000 frames). Peaks around 600 episodes at around 1000 points. However, beyond update 800, performance appears to degrade significantly, with frequent fluctuations and occasional spikes. This instability could stem from on-policy sampling noise or suboptimal hyperparameter tuning. Despite this, PPO demonstrates the ability to learn basic survival and pellet-collection strategies early in training.
+Rainbow DQN, though more volatile, shows a clearer upward trajectory with multiple peaks surpassing 1,000 and 2,000 points. These spikes indicate discovery of higher-reward strategies, benefiting from Rainbow’s architectural features like prioritized replay and distributional outputs. Despite its instability, Rainbow demonstrates superior long-term reward potential within the same frame budget.
 
-In contrast, the Rainbow DQN agent (bottom) shows a clearer upward trajectory over the course of training. Reward variability is also high, but we observe several distinct peaks exceeding 1000 and even 2000 points, indicating that the agent has discovered higher-reward behaviors (e.g., efficient pellet clearing or ghost chasing). The learning curve is less smooth but shows better long-term reward potential. This aligns with Rainbow’s design as a more sample-efficient value-based method that benefits from prioritized replay and distributional learning.
+\subsection{Insights and Interpretation}
 
-\subsection{Interpretation and Comparative Insights}
+Rainbow DQN consistently outperforms PPO in peak performance, affirming the effectiveness of value-based methods enhanced with multi-step returns, noisy exploration, and replay prioritization in sparse-reward, long-horizon tasks. However, high variance in both methods suggests neither has fully stabilized. PPO’s reward collapse highlights the challenges of on-policy learning, while Rainbow’s fluctuations point to sensitivity in replay dynamics and learning rate tuning. Rainbow’s stronger trend suggests greater promise under the current constraints, while PPO may benefit from longer rollouts or adjusted GAE parameters.
 
-Both agents show signs of early learning, but Rainbow DQN achieves significantly higher peak rewards than PPO. This suggests that value-based methods, particularly those enhanced by Rainbow’s extensions (e.g., prioritized replay, noisy exploration, and multi-step targets), may be more effective at discovering high-reward strategies in sparse-reward, long-horizon environments like Ms. Pac-Man.
+\subsection{Rainbow DQN Hyperparameter Ablation}
 
-However, the volatility in both plots indicates that neither agent has fully stabilized. PPO’s reward collapse in later updates highlights the sensitivity of policy gradient methods to training hyperparameters and the challenges of on-policy learning in high-dimensional settings. Conversely, Rainbow’s high variance suggests that better reward shaping, more training time, or additional architectural tuning (e.g., learning rate, replay buffer size) might be needed to achieve consistent gains.
+Figure~\ref{fig:ablation} presents eight Rainbow DQN configurations varying in learning rate \(\eta\), multi-step return \(n\), and prioritization strength \(\alpha\). Four settings stand out: D, E, G, and H — all using \(\eta = 5 \times 10^{-5}\) or compensating via increased \(\alpha\), and three with \(n = 5\). These combinations yielded higher final rewards, suggesting that deeper bootstrapping and moderately aggressive learning rates facilitate better performance in sparse-reward environments.
 
-In summary, Rainbow DQN shows greater promise in this environment under the current constraints, exhibiting higher peak performance and a stronger upward trend. PPO’s learning is less consistent, though its earlier convergence and training stability in the initial phase suggest it may benefit from a more extensive rollout horizon or different GAE parameters.
+\subsection{Extended Sweep: Replay and Update Scaling}
 
-\subsection{Hyperparameter Ablation Results on Rainbow DQN}
+To test broader settings, we re-ran all eight ablations with a larger replay buffer (1M), slower target updates (every 5,000 steps), and extended \(\beta\)-annealing (500K frames). As shown in Figure~\ref{fig:extended_sweep}, all configurations improved relative to their 30K-frame baselines, with C\_large, E\_large, G\_large, and H\_large showing the greatest gains. These settings share a larger buffer and, in most cases, a 5-step return.
 
-Figure~\ref{fig:ablation} shows the cross product of our two learning rates \(\eta=1\times10^{-5},\,5\times10^{-5}\), two multi‐step return lengths \(n=3,5\), and two prioritization strengths \(\alpha=0.4,0.6\). While all eight curves exhibit high variance, four configurations stand out:
-
-\begin{itemize}
-  \item \textbf{Configuration D} (red): \(\eta=1\times10^{-5},\,n=5,\,\alpha=0.6\);
-  \item \textbf{Configuration E} (purple): \(\eta=5\times10^{-5},\,n=3,\,\alpha=0.4\);
-  \item \textbf{Configuration G} (pink): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.4\);
-  \item \textbf{Configuration H} (gray): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.6\).
-\end{itemize}
-
-All four use the higher learning rate of \(5\times10^{-5}\) except D (which compensates with a larger \(\alpha\)), and three of them (D, G, H) employ the larger \(n=5\) return. Their stronger final rewards suggest that, in Ms.\ Pac‑Man’s sparse, long‑horizon setting, both a more aggressive multi‑step bootstrap (\(n=5\)) and a modestly increased learning rate help the agent discover higher‑reward behaviors.
-
-\subsection{Extended Hyperparameter Sweep on Rainbow DQN}
-
-To assess how auxiliary settings affect all eight baseline configurations (A–H), we re‑ran each combination with the following scaled‑up parameters:
-\begin{itemize}
-  \item \texttt{buffer\_size}: 100\,000 \(\to\) 1\,000\,000  
-  \item \texttt{target\_update\_every}: 1\,000 frames \(\to\) 5\,000 frames  
-  \item \(\beta\_frames\): 100\,000 \(\to\) 500\,000  
-\end{itemize}
-
-Figure~\ref{fig:extended_sweep} plots the resulting “large” runs (A\_large–H\_large). While all eight extended curves improve compared to their 30K‑frame originals (Section 4.3), four in particular rise noticeably above the pack:
-\begin{itemize}
-  \item \textbf{Configuration C\_large} (green): \(\eta=1\times10^{-5},\,n=5,\,\alpha=0.4\)  
-  \item \textbf{Configuration E\_large} (purple): \(\eta=5\times10^{-5},\,n=3,\,\alpha=0.4\)  
-  \item \textbf{Configuration G\_large} (pink): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.4\)  
-  \item \textbf{Configuration H\_large} (gray): \(\eta=5\times10^{-5},\,n=5,\,\alpha=0.6\)  
-\end{itemize}
-
-All four share the larger replay buffer, and three of them (C, G, H) use the 5‑step return. Their gains demonstrate that, beyond choosing an aggressive bootstrap horizon (\(n=5\)) and modestly higher learning rate, scaling up replay capacity and slowing \(\beta\)-annealing provides more benefit—smoothing variance and boosting median reward most for those combinations. However, all curves remain highly volatile, with nearly every configuration fluctuating on the order of \(\pm500\) points per episode. This high variance stems from Ms.\ Pac-Man’s sparse, delayed rewards and the stochastic nature of prioritized sampling, which—despite larger buffers and slower \(\beta\) schedules—amplifies jitter in the estimated value distributions. As a result, the extended hyperparameter sweep yields only modest overall improvement, and further work (e.g., more seeds, longer training, or variance‐reduction techniques) may be required to reveal clearer gains.  
+Despite improvements, all runs remained highly variable—fluctuating by \(\pm500\) points per episode. This reflects the stochastic nature of prioritized replay and the challenge of sparse rewards in Ms. Pac-Man. While extended settings enhanced median returns, further progress may require additional seeds, longer training durations, or targeted variance-reduction techniques.
 
 \subsection{Seed‐Level Reproducibility on Rainbow DQN}
 
@@ -199,31 +156,17 @@ Overall, Configuration E achieves a higher average reward than A, but at the co
 
 \subsection{Rainbow DQN Ablation Study}
 
-To better understand the contribution of individual components within the Rainbow DQN architecture, we conducted a series of ablation experiments. Specifically, we evaluated three reduced versions of Rainbow:
-\begin{itemize}
-    \item \textbf{nstep1:} Multi-step returns are disabled by setting $n=1$ (i.e., single-step targets).
-    \item \textbf{no\_prior:} Prioritized replay is replaced with uniform sampling.
-    \item \textbf{no\_noisy:} NoisyLinear layers are replaced with standard linear layers, disabling learned exploration.
-\end{itemize}
+To elucidate the contributions of individual components in the Rainbow DQN architecture, we conducted an ablation study comparing three simplified variants: \textbf{nstep1}, with multi-step returns disabled by setting $n=1$; \textbf{no\_prior}, using uniform sampling in place of prioritized replay; and \textbf{no\_noisy}, where NoisyLinear layers are replaced with standard linear ones, disabling learned exploration.
 
-Figure~\ref{fig:rainbow_ablation} shows the training performance of the full Rainbow agent compared to each ablation over 45 episodes. While all variants remain within a similar average performance range (200–700 points), some key trends emerge.
+Figure~\ref{fig:rainbow_ablation} presents training performance across 45 episodes. All variants exhibit similar average scores (200–700 points), yet distinct patterns emerge.
 
-First, we observe that the \textbf{full Rainbow} configuration occasionally achieves significantly higher rewards (e.g., a spike around episode 7 and another at episode 20), suggesting that the combined effects of prioritized replay, multi-step returns, and noisy exploration facilitate effective strategy discovery. However, these peaks are interspersed with episodes of mediocre performance, indicating instability during early training.
+The \textbf{full Rainbow} agent occasionally achieves notably higher rewards—e.g., sharp peaks around episodes 7 and 20—implying that the integration of prioritized replay, multi-step returns, and noisy exploration enhances strategic discovery. Nonetheless, its performance remains volatile in early training, suggesting instability.
 
-The \textbf{no\_prior} variant performs comparably well in later episodes, even outperforming full Rainbow for sustained periods after episode 25. This suggests that while prioritized replay can accelerate early learning, it may not be essential for eventual policy quality—at least under limited training conditions.
+The \textbf{no\_prior} agent performs competitively in later stages, at times surpassing full Rainbow after episode 25. This implies that prioritized replay, while beneficial for early learning, may not be crucial for final policy quality under constrained training.
 
-Interestingly, the \textbf{no\_noisy} agent shows stronger improvement toward the end of training compared to the baseline, reaching scores above 1000 in multiple episodes. This indicates that deterministic policies may offer better stability in this environment, though they may initially explore less effectively.
+The \textbf{no\_noisy} variant shows pronounced late-stage gains, exceeding 1000 points in several episodes. This suggests that deterministic policies may yield greater stability in this domain, albeit with less effective initial exploration.
 
-Finally, the \textbf{nstep1} variant consistently underperforms across the entire training window. This confirms the importance of multi-step bootstrapping for sparse reward propagation in long-horizon environments like Ms. Pac-Man.
-
-\subsubsection*{Summary of Findings}
-\begin{itemize}
-    \item Multi-step returns ($n > 1$) are critical for performance in sparse-reward settings.
-    \item Prioritized replay improves early exploration, but may be less important for long-term policy success.
-    \item Noisy exploration accelerates early learning but may introduce instability; deterministic networks (no\_noisy) can still perform well.
-\end{itemize}
-
-These insights reinforce the utility of Rainbow’s component-wise enhancements while also suggesting that certain components, like prioritized replay, may be omitted in resource-constrained deployments without catastrophic performance loss.
+By contrast, the \textbf{nstep1} configuration consistently underperforms, underscoring the critical role of multi-step bootstrapping in environments with sparse, delayed rewards such as Ms. Pac-Man.
 
 % \subsection{Robustness to Color Perturbations}
 
@@ -248,12 +191,11 @@ These insights reinforce the utility of Rainbow’s component-wise enhancements 
 
 \section{Conclusion}
 
-Across our experiments in the \texttt{MsPacman-v0} environment, Rainbow DQN demonstrated greater long-term potential compared to PPO. While both agents showed signs of early learning, Rainbow consistently reached higher peak rewards, suggesting that value-based methods — especially those enhanced with prioritized replay, multi-step returns, and noisy exploration — are more effective at discovering high-reward strategies in sparse-reward, long-horizon settings like Ms. Pac-Man.
+In the \texttt{MsPacman-v0} environment, Rainbow DQN outperformed PPO in terms of peak reward and long-term potential. While both agents exhibited early learning, Rainbow’s combination of prioritized replay, multi-step returns, and noisy exploration proved more effective in sparse-reward, long-horizon scenarios, despite occasional instability.
 
-PPO initially showed more stable performance but suffered from later instability and reward collapse, highlighting the sensitivity of policy gradient methods to hyperparameter tuning and on-policy sampling noise. Meanwhile, Rainbow’s higher variance points to its own limitations, such as the need for more careful reward shaping or extended training to achieve consistent convergence. Nevertheless, under our limited frame budget, Rainbow's sample efficiency and reward potential clearly outpaced PPO.
+PPO showed greater initial stability but suffered from later performance collapse, underscoring its sensitivity to on-policy sampling and hyperparameters. Rainbow's variance highlights its own limitations, yet in our frame budget, it demonstrated superior sample efficiency and strategic discovery.
 
-\subsection{Future Work}
-Other interesting things that could be tried for both our PPO and Rainbow agents in Ms. Pac-Man, we suggest three next steps. First, adding memory (LSTM) to PPO would help the agent remember past states, which is crucial for navigating mazes. Second, training both algorithms much longer—for tens of millions of frames—could help them reach superhuman scores, like top RL systems do in other games. Finally, running each experiment at least 5 times would make the results more reliable, since deep RL training can vary a lot between runs. These changes would help us build stronger agents and better understand how to master complex games like Ms. Pac-Man.
+Future work could enhance both agents by incorporating memory (e.g., LSTM) for improved temporal reasoning, extending training to tens of millions of frames to approach superhuman performance, and doing multiple runs per setting to mitigate training variance. These would strengthen agent robustness and further illuminate the challenges of mastering complex environments like Ms. Pac-Man.
 
 \appendix
 \section{Appendix}
@@ -268,7 +210,7 @@ Other interesting things that could be tried for both our PPO and Rainbow agents
 \end{figure}
 
 \subsection{Rainbow DQN vs PPO}
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.85\linewidth]{rainbow_vs_ppo.png}
   \caption{Training performance of PPO and Rainbow DQN agents.}
@@ -276,7 +218,7 @@ Other interesting things that could be tried for both our PPO and Rainbow agents
 \end{figure}
 
 \subsection{Rainbow DQN Ablation Results}
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\linewidth]{rainbow_8Regular.png}
   \caption{Learning curves for the eight hyperparameter configurations:
@@ -287,7 +229,7 @@ Other interesting things that could be tried for both our PPO and Rainbow agents
 \end{figure}
 
 \subsection{Extended Hyperparameter Sweep}
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\linewidth]{rainbow_8Extended.png}
   \caption{Learning curves for the eight “large” hyperparameter runs (A\_large–H\_large).}
@@ -295,14 +237,14 @@ Other interesting things that could be tried for both our PPO and Rainbow agents
 \end{figure}
 
 \subsection{Seed-Level Reproducibility}
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\linewidth]{rainbow_A_seed.png}
   \caption{Configuration A (\(\eta=1\times10^{-5},\,n=3,\,\alpha=0.4\)) across three seeds.}
   \label{fig:seed_A}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\linewidth]{rainbow_E_Seed.png}
   \caption{Configuration E (\(\eta=5\times10^{-5},\,n=3,\,\alpha=0.4\)) across three seeds.}
@@ -310,7 +252,7 @@ Other interesting things that could be tried for both our PPO and Rainbow agents
 \end{figure}
 
 \subsection{Ablated Rainbow DQN Variants}
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{rainbow_ablation_smooth.png}
   \caption{Training performance of Rainbow DQN and ablated variants on Ms. Pac-Man.}
