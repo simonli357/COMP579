@@ -51,12 +51,6 @@ This study provides insights into the design and evaluation of RL algorithms in 
 
 Reinforcement Learning formalizes sequential decision-making as a Markov Decision Process (MDP), defined by $(\mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}, \gamma)$, where $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $\mathcal{P}(s'|s,a)$ the transition model, $\mathcal{R}(s,a)$ the reward function, and $\gamma \in [0,1)$ the discount factor. The agent selects actions to maximize expected return $\mathbb{E}[\sum_t \gamma^t r_t]$ based on its interactions with the environment.
 
-\subsection{The Ms. Pac-Man Environment}
-
-The \texttt{MsPacman-v0} environment is a high-dimensional, partially observable MDP. Each observation is a $210 \times 160 \times 3$ RGB frame, preprocessed to $84 \times 84$ grayscale. The action space consists of discrete directional commands and a no-op. Reward signals are sparse, with +10 for pellets, +200 for ghosts after consuming a power pellet, and a time-step penalty of –1. An episode ends when the agent loses three lives.
-
-This environment presents multiple challenges: pixel-based observations limit access to the full game state, ghost behavior is stochastic and partially unpredictable, and the sparse reward structure complicates credit assignment and learning signal propagation. Additionally, the lack of intermediate rewards increases the difficulty of learning effective threat avoidance or path planning strategies.
-
 \subsection{Rainbow DQN}
 
 Rainbow DQN \cite{hessel2018rainbow} combines several enhancements to the original DQN \cite{mnih2015human}, aiming to improve sample efficiency, stability, and exploration. Double Q-learning addresses overestimation bias by decoupling action selection and evaluation in target computation. The dueling network architecture separates state-value and advantage estimation to refine action selection. Prioritized experience replay focuses learning on high-error transitions, improving data efficiency. Noisy networks inject trainable stochasticity into parameters, facilitating more efficient exploration. Multi-step returns accelerate learning by propagating rewards over multiple future steps. Distributional RL (C51) models a categorical distribution over future returns, enabling richer value representation.
@@ -68,10 +62,6 @@ PPO \cite{schulman2017proximal} is a first-order policy-gradient algorithm that 
 L^{\text{CLIP}}(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) \hat{A}_t \right) \right],
 \]
 where $r_t(\theta)$ is the probability ratio between the new and old policies, and $\hat{A}_t$ is an estimate of the advantage function. PPO strikes a balance between exploration and stability, making it suitable for a wide range of tasks without extensive tuning.
-
-\subsection{Evaluation Challenges}
-
-Evaluating agents in visually rich environments like Ms. Pac-Man is non-trivial. RL training is often unstable due to non-stationarity, bootstrapping errors, and high sensitivity to hyperparameters. Sample efficiency is critical, especially when training from pixel inputs requires millions of frames. Generalization remains an open challenge, as agents frequently overfit to the visual statistics of the training domain. Even minor pixel-level perturbations can lead to catastrophic performance drops, as shown in \cite{zhang2020investigation}.
 
 \subsection{Related Work}
 
@@ -96,7 +86,7 @@ We employ two preprocessing pipelines:
 \paragraph{Rainbow DQN.} We implement the full Rainbow DQN \cite{hessel2018rainbow}, incorporating:
 a convolutional encoder (32, 64, 64 filters); a dueling head with separate value and advantage streams; NoisyLinear layers ($\sigma=0.017$); a distributional output with 51 atoms over $[-10, 10]$; prioritized replay ($\alpha = 0.6$, $\beta$ annealed from 0.4 to 1.0); and multi-step returns with $n = 3$. The target network is updated every 1,000 steps. Training uses the Adam optimizer with a learning rate of $1 \times 10^{-4}$.
 
-\paragraph{Proximal Policy Optimization (PPO).} PPO follows a shared convolutional encoder (identical to Rainbow), feeding into a 512-unit fully connected layer, then branching into actor and critic heads. We optimize the clipped surrogate objective ($\epsilon = 0.1$) and use GAE with $\lambda = 0.95$. PPO is trained with a batch size of 32, a learning rate of $2.5 \times 10^{-4}$, across 1000 updates with 256-step rollouts (256,000 environment steps in total).
+\paragraph{Proximal Policy Optimization (PPO).} PPO follows a shared convolutional encoder (identical to Rainbow), feeding into a 512-unit fully connected layer, then branching into actor and critic heads. We optimize the clipped surrogate objective ($\epsilon$) and use GAE with $\lambda$. PPO is trained with 3 different sets of hyperparameters representing different scenarios to determine which would be able to perform best.
 
 \subsection{Training Details}
 
