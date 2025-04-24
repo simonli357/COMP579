@@ -1,11 +1,11 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Background}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Reinforcement Learning and MDPs}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{The Ms. Pac-Man Environment}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Rainbow DQN}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.4}{Proximal Policy Optimization \(PPO\)}{section.2}% 6
-\BOOKMARK [2][-]{subsection.2.5}{Related Work}{section.2}% 7
-\BOOKMARK [1][-]{section.3}{Methodology}{}% 8
+\BOOKMARK [2][-]{subsection.2.2}{Rainbow DQN}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Proximal Policy Optimization \(PPO\)}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Related Work}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Methodology}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Environment}{section.3}% 8
 \BOOKMARK [1][-]{section.4}{Results and Discussion}{}% 9
 \BOOKMARK [2][-]{subsection.4.1}{PPO Hyperparameter Sensitivity}{section.4}% 10
 \BOOKMARK [2][-]{subsection.4.2}{Comparative Performance: Rainbow DQN vs. PPO}{section.4}% 11

@@ -4,45 +4,45 @@ The top-level auxiliary file: main.aux
 The style file: plain.bst
 Database file #1: references.bib
 Warning--can't use both volume and number fields in hessel2018rainbow
-You've used 7 entries,
+You've used 6 entries,
             2118 wiz_defined-function locations,
-            542 strings with 5717 characters,
-and the built_in function-call counts, 3012 in all, are:
-= -- 259
-> -- 226
+            537 strings with 5493 characters,
+and the built_in function-call counts, 2614 in all, are:
+= -- 228
+> -- 193
 < -- 2
-+ -- 91
-- -- 82
-* -- 243
-:= -- 520
-add.period$ -- 22
-call.type$ -- 7
-change.case$ -- 61
++ -- 77
+- -- 70
+* -- 213
+:= -- 451
+add.period$ -- 19
+call.type$ -- 6
+change.case$ -- 52
 chr.to.int$ -- 0
-cite$ -- 8
-duplicate$ -- 97
-empty$ -- 201
-format.name$ -- 82
-if$ -- 600
+cite$ -- 7
+duplicate$ -- 83
+empty$ -- 173
+format.name$ -- 70
+if$ -- 521
 int.to.chr$ -- 0
-int.to.str$ -- 7
-missing$ -- 7
-newline$ -- 38
-num.names$ -- 14
-pop$ -- 74
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 33
+num.names$ -- 12
+pop$ -- 61
 preamble$ -- 1
-purify$ -- 54
+purify$ -- 46
 quote$ -- 0
-skip$ -- 57
+skip$ -- 50
 stack$ -- 0
-substring$ -- 103
-swap$ -- 19
+substring$ -- 97
+swap$ -- 17
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 28
+type$ -- 24
 warning$ -- 1
-while$ -- 21
-width$ -- 8
-write$ -- 77
+while$ -- 19
+width$ -- 7
+write$ -- 67
 (There was 1 warning)

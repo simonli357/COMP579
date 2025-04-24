@@ -37,11 +37,4 @@ Mikael Toromanoff, Alessandro Lazaric, and Olivier Pietquin.
   processes with high-dimensional states and actions.
 \newblock In {\em International Conference on Machine Learning (ICML)}, 2019.
 
-\bibitem{zhang2020investigation}
-Amy Zhang, Andrew Ballard, Tom Zahavy, Huan Xu, Joelle Pineau, and Marc~G
-  Bellemare.
-\newblock An investigation of model-free planning.
-\newblock In {\em International Conference on Learning Representations (ICLR)},
-  2020.
-
 \end{thebibliography}

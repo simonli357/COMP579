@@ -49,12 +49,6 @@ This study provides insights into the design and evaluation of RL in complex vis
 
 Reinforcement Learning formalizes sequential decision-making as a Markov Decision Process (MDP), defined by $(\mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}, \gamma)$, where $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $\mathcal{P}(s'|s,a)$ the transition model, $\mathcal{R}(s,a)$ the reward function, and $\gamma \in [0,1)$ the discount factor. The agent selects actions to maximize expected return $\mathbb{E}[\sum_t \gamma^t r_t]$ based on its interactions with the environment.
 
-\subsection{The Ms. Pac-Man Environment}
-
-The \texttt{MsPacman-v0} environment is a high-dimensional, partially observable MDP. Each observation is a $210 \times 160 \times 3$ RGB frame, preprocessed to $84 \times 84$ grayscale. The action space consists of discrete directional commands and a no-op. Reward signals are sparse, with +10 for pellets, +200 for ghosts after consuming a power pellet, and a time-step penalty of –1. An episode ends when the agent loses three lives.
-
-This environment presents multiple challenges: pixel-based observations limit access to the full game state, ghost behavior is stochastic and partially unpredictable, and the sparse reward structure complicates credit assignment and learning signal propagation. Additionally, the lack of intermediate rewards increases the difficulty of learning effective threat avoidance or path planning strategies.
-
 \subsection{Rainbow DQN}
 
 Rainbow DQN \cite{hessel2018rainbow} combines several enhancements to the original DQN \cite{mnih2015human}, aiming to improve sample efficiency, stability, and exploration. Double Q-learning addresses overestimation bias by decoupling action selection and evaluation in target computation. The dueling network architecture separates state-value and advantage estimation to refine action selection. Prioritized experience replay focuses learning on high-error transitions, improving data efficiency. Noisy networks inject trainable stochasticity into parameters, facilitating more efficient exploration. Multi-step returns accelerate learning by propagating rewards over multiple future steps. Distributional RL (C51) models a categorical distribution over future returns, enabling richer value representation.
@@ -67,20 +61,20 @@ L^{\text{CLIP}}(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) \hat{A}_t,
 \]
 where $r_t(\theta)$ is the probability ratio between the new and old policies, and $\hat{A}_t$ is an estimate of the advantage function. PPO strikes a balance between exploration and stability, making it suitable for a wide range of tasks without extensive tuning.
 
-Evaluating agents in visually rich environments like Ms. Pac-Man is non-trivial. RL training is prone to instability from non-stationarity, bootstrapping errors, and high sensitivity to hyperparameters. Sample efficiency is critical in pixel-based settings, and generalization remains an open challenge: minor visual perturbations can significantly degrade performance \cite{zhang2020investigation}.
-
 \subsection{Related Work}
 Past approaches to Ms. Pac-Man include recurrent architectures for partial observability \cite{toromanoff2019deep} and planning-based methods like Monte Carlo Tree Search \cite{pieters2016monte}, often relying on engineered features. In contrast, we adopt a fully pixel-based learning setup and extend the robustness analysis via controlled visual perturbations.
 
 \section{Methodology}
 
-We evaluate agents in the \texttt{MsPacman-v0} environment from OpenAI Gym, built on the Arcade Learning Environment (ALE) \cite{ale}. Each state is a $210 \times 160 \times 3$ RGB frame, which we preprocess into $84 \times 84$ grayscale or normalized color images in the $[0,1]$ range. To provide temporal context, we stack the last four frames. The action space includes nine discrete actions (cardinal, diagonal, and no-op). The reward function is sparse: +10 for pellets, +200 for ghosts (after a power pellet), and a –1 step penalty. Episodes end when the agent loses three lives.
+\subsection{Environment}
+
+We evaluate agents in the \texttt{MsPacman-v0} environment from OpenAI Gym, based on the Arcade Learning Environment (ALE) \cite{ale}. The environment outputs raw $210 \times 160 \times 3$ RGB frames, which we preprocess into $84 \times 84$ grayscale or color-normalized images scaled to $[0, 1]$. To encode temporal dynamics, we stack the last 4 frames as input. The action space comprises 9 discrete actions: four cardinal, four diagonal directions, and a no-op. Rewards are sparse: +10 for pellets, +200 for ghosts after a power pellet, and –1 per time step. Episodes end after the agent loses all 3 lives.
 
 We employ two preprocessing pipelines. The baseline pipeline converts RGB frames to grayscale, resizes them to $84 \times 84$ via bilinear interpolation, normalizes the pixel values, and stacks four frames. To evaluate robustness, we also introduce a \texttt{ColorPreprocessFrame} wrapper that applies red, green, or blue tints or OpenCV colormaps (e.g., \texttt{cv2.COLORMAP\_JET}) to grayscale frames, yielding semantically identical but visually altered 3-channel RGB inputs.
 
 Our Rainbow DQN implementation follows the full architecture described in \cite{hessel2018rainbow}. It consists of a convolutional encoder (32, 64, 64 filters), a dueling head for value and advantage estimation, and NoisyLinear layers with initial standard deviation $\sigma=0.017$. The output is distributional, with 51 atoms over $[-10, 10]$. We use prioritized experience replay ($\alpha = 0.6$, $\beta$ annealed from 0.4 to 1.0) and multi-step returns with $n = 3$. Target networks are updated every 1,000 steps. The model is trained using Adam with a learning rate of $1 \times 10^{-4}$.
 
-PPO shares the same convolutional encoder but uses a 512-unit fully connected layer and separate actor-critic heads. It optimizes the clipped surrogate objective with $\epsilon = 0.1$ and applies Generalized Advantage Estimation (GAE) with $\lambda = 0.95$. PPO is trained with a batch size of 32, a learning rate of $2.5 \times 10^{-4}$, and 256-step rollouts for 1000 updates (totaling 256,000 steps).
+PPO follows a shared convolutional encoder (identical to Rainbow), feeding into a 512-unit fully connected layer, then branching into actor and critic heads. We optimize the clipped surrogate objective ($\epsilon$) and use GAE with $\lambda$. PPO is trained with 3 different sets of hyperparameters representing different scenarios to determine which would be able to perform best.
 
 All agents are trained using stacked-frame observations and the Adam optimizer. Rainbow DQN is trained for 30,000–50,000 frames per setting; PPO is trained for 1,000 steps due to its on-policy nature. We use a fixed seed (357) across all experiments. Evaluation is performed post-training, with exploration disabled. Ablation and color robustness studies were run on an NVIDIA RTX 3080 laptop, while hyperparameter tuning was performed on a Mac notebook. Training time ranged from 2 to 5 hours depending on the setup.
 
