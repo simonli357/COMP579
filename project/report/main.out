@@ -5,20 +5,13 @@
 \BOOKMARK [2][-]{subsection.2.3}{Proximal Policy Optimization \(PPO\)}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{Related Work}{section.2}% 6
 \BOOKMARK [1][-]{section.3}{Methodology}{}% 7
-\BOOKMARK [2][-]{subsection.3.1}{Environment}{section.3}% 8
-\BOOKMARK [1][-]{section.4}{Results and Discussion}{}% 9
-\BOOKMARK [2][-]{subsection.4.1}{PPO Hyperparameter Sensitivity}{section.4}% 10
-\BOOKMARK [2][-]{subsection.4.2}{Comparative Performance: Rainbow DQN vs. PPO}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.3}{Insights and Interpretation}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.4}{Rainbow DQN Hyperparameter Ablation}{section.4}% 13
-\BOOKMARK [2][-]{subsection.4.5}{Extended Sweep: Replay and Update Scaling}{section.4}% 14
-\BOOKMARK [2][-]{subsection.4.6}{Rainbow DQN Ablation Study}{section.4}% 15
-\BOOKMARK [1][-]{section.5}{Conclusion}{}% 16
-\BOOKMARK [1][-]{appendix.A}{Appendix}{}% 17
-\BOOKMARK [2][-]{subsection.A.1}{PPO Hyperparameter Sweeps}{appendix.A}% 18
-\BOOKMARK [2][-]{subsection.A.2}{Rainbow DQN vs PPO}{appendix.A}% 19
-\BOOKMARK [2][-]{subsection.A.3}{Rainbow DQN Ablation Results}{appendix.A}% 20
-\BOOKMARK [2][-]{subsection.A.4}{Extended Hyperparameter Sweep}{appendix.A}% 21
-\BOOKMARK [2][-]{subsection.A.5}{Seed-Level Reproducibility}{appendix.A}% 22
-\BOOKMARK [2][-]{subsection.A.6}{Ablated Rainbow DQN Variants}{appendix.A}% 23
-\BOOKMARK [1][-]{figure.7}{References}{}% 24
+\BOOKMARK [1][-]{section.4}{Results and Discussion}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{PPO Hyperparameter Sensitivity}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Comparative Performance: Rainbow DQN vs. PPO}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.3}{Insights and Interpretation}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.4}{Rainbow DQN Hyperparameter Ablation}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.5}{Extended Sweep: Replay and Update Scaling}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.6}{Rainbow DQN Ablation Study}{section.4}% 14
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 15
+\BOOKMARK [1][-]{appendix.A}{Appendix}{}% 16
+\BOOKMARK [1][-]{figure.8}{References}{}% 17

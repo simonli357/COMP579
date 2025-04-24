@@ -66,8 +66,6 @@ Past approaches to Ms. Pac-Man include recurrent architectures for partial obser
 
 \section{Methodology}
 
-\subsection{Environment}
-
 We evaluate agents in the \texttt{MsPacman-v0} environment from OpenAI Gym, based on the Arcade Learning Environment (ALE) \cite{ale}. The environment outputs raw $210 \times 160 \times 3$ RGB frames, which we preprocess into $84 \times 84$ grayscale or color-normalized images scaled to $[0, 1]$. To encode temporal dynamics, we stack the last 4 frames as input. The action space comprises 9 discrete actions: four cardinal, four diagonal directions, and a no-op. Rewards are sparse: +10 for pellets, +200 for ghosts after a power pellet, and –1 per time step. Episodes end after the agent loses all 3 lives.
 
 We employ two preprocessing pipelines. The baseline pipeline converts RGB frames to grayscale, resizes them to $84 \times 84$ via bilinear interpolation, normalizes the pixel values, and stacks four frames. To evaluate robustness, we also introduce a \texttt{ColorPreprocessFrame} wrapper that applies red, green, or blue tints or OpenCV colormaps (e.g., \texttt{cv2.COLORMAP\_JET}) to grayscale frames, yielding semantically identical but visually altered 3-channel RGB inputs.
@@ -94,7 +92,7 @@ We evaluated three PPO configurations: \textit{Balanced} (blue), \textit{Fast Tr
 
 \subsection{Comparative Performance: Rainbow DQN vs. PPO}
 
-Figure~\ref{fig:ppo_vs_rainbow} compares PPO and Rainbow DQN learning in \texttt{MsPacman-v0}. PPO displays early convergence to a moderate range (600–800 points) but deteriorates after update 800, likely due to sampling noise and hyperparameter sensitivity. It still manages to acquire basic survival and collection behaviors.
+Figure~\ref{fig:ppo} and Figure~\ref{fig:rainbow} compares PPO and Rainbow DQN learning in \texttt{MsPacman-v0}. PPO displays early convergence to a moderate range (600–800 points) but deteriorates after update 800, likely due to sampling noise and hyperparameter sensitivity. It still manages to acquire basic survival and collection behaviors.
 
 Rainbow DQN, though more volatile, shows a clearer upward trajectory with multiple peaks surpassing 1,000 and 2,000 points. These spikes indicate discovery of higher-reward strategies, benefiting from Rainbow’s architectural features like prioritized replay and distributional outputs. Despite its instability, Rainbow demonstrates superior long-term reward potential within the same frame budget.
 
@@ -147,7 +145,6 @@ Future work could enhance both agents by incorporating memory (e.g., LSTM) for i
 \section{Appendix}
 \label{sec:appendix}
 
-\subsection{PPO Hyperparameter Sweeps}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{PPO_output_hyperparameters_3set.png}
@@ -155,15 +152,19 @@ Future work could enhance both agents by incorporating memory (e.g., LSTM) for i
   \label{fig:ppo_hyperparams}
 \end{figure}
 
-\subsection{Rainbow DQN vs PPO}
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\linewidth]{rainbow_vs_ppo.png}
-  \caption{Training performance of PPO and Rainbow DQN agents.}
-  \label{fig:ppo_vs_rainbow}
+  \includegraphics[width=0.85\linewidth]{left.jpg}
+  \caption{Training performance of PPO agent, to be compared with Rainbow DQN.}
+  \label{fig:ppo}
+\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\linewidth]{right.png}
+  \caption{Training performance of Rainbow DQN agent.}
+  \label{fig:rainbow}
 \end{figure}
 
-\subsection{Rainbow DQN Ablation Results}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\linewidth]{rainbow_8Regular.png}
@@ -174,7 +175,6 @@ Future work could enhance both agents by incorporating memory (e.g., LSTM) for i
   \label{fig:ablation}
 \end{figure}
 
-\subsection{Extended Hyperparameter Sweep}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\linewidth]{rainbow_8Extended.png}
@@ -182,7 +182,6 @@ Future work could enhance both agents by incorporating memory (e.g., LSTM) for i
   \label{fig:extended_sweep}
 \end{figure}
 
-\subsection{Seed-Level Reproducibility}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\linewidth]{rainbow_A_seed.png}
@@ -197,7 +196,6 @@ Future work could enhance both agents by incorporating memory (e.g., LSTM) for i
   \label{fig:seed_E}
 \end{figure}
 
-\subsection{Ablated Rainbow DQN Variants}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{rainbow_ablation_smooth.png}
